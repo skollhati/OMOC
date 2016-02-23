@@ -84,11 +84,16 @@ void GameProcess::checkStone(xy hd, int GMap[MAP_Y][MAP_X], int turn)
 		{
 			gotoxy(0, MAP_Y);
 			if (turn == U1)
-				printf("사용자 1");
+			{
+				_tprintf(_T("%s"), vInfo->getUserInfo(1).name);
+				vInfo->setVersusUpdate(true);
+			}
 			else
-				printf("사용자 2");
-
-			printf("님이 승리하셨습니다.");
+			{
+				_tprintf(_T("%s"), vInfo->getUserInfo(2).name);
+				vInfo->setVersusUpdate(false);
+			}
+			printf("님이 승리하셨습니다.\n");
 			getch();
 			
 			menu();

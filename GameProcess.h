@@ -10,6 +10,7 @@
 //5.비정상 종료 대비
 
 #include "main.h"
+#include "VersusInfo.h"
 
 #define LEFT 75
 #define RIGHT 77
@@ -22,6 +23,9 @@
 #define U1 1
 #define U2 2
 
+
+using namespace std;
+
 typedef struct XY {
 	int x;
 	int y;
@@ -33,7 +37,21 @@ public:
 
 	GameProcess()
 	{
+		//LPTSTR un1 = _T(""), un2 = _T("");
+		TCHAR uName1[100];
+		TCHAR uName2[100];
+		
+		_tprintf(_T("user1 name:"));
+		_tscanf(_T("%s"), uName1);
+		_tprintf(_T("user2 name:"));
+		_tscanf(_T("%s"), uName2);
+
+		_tprintf(_T("user1 : %s user2 : %s\n"),uName1,uName2);
+
+
+		vInfo = new VersusInfo(uName1, uName2);
 		menu();
+
 	}
 
 	~GameProcess()
@@ -64,7 +82,7 @@ public:
 
 private:
 	char cmd[256] = "\0";
-	
+	VersusInfo* vInfo;
 };
 
 #endif // !__GAMEPROCESS_H__

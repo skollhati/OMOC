@@ -4,21 +4,25 @@
 
 typedef struct UserInfo
 {
-	LPTSTR name;
+	TCHAR name[100];
 	INT win = 0;
 	INT lose = 0;
 }USER_INFO;
 
 class VersusInfo
 {
+
 public:
 	VersusInfo()
 	{}
 
-	VersusInfo(LPTSTR U1, LPTSTR U2)
+	VersusInfo(TCHAR U1[], TCHAR U2[])
 	{
-		memccpy(user1.name, U1, 0, _tcslen(U1));
-		memccpy(user2.name, U2, 0, _tcslen(U2));
+		_tcscpy(user1.name, U1);
+		_tcscpy(user2.name, U2);
+
+		_tprintf(_T(" test :%s\n"), user1.name);
+		_tprintf(_T("%s\n"), user2.name);
 	}
 
 	~VersusInfo()
@@ -30,8 +34,9 @@ public:
 	{
 		if (num == 1)
 			return user1;
-		else 
+		else if (num == 2)
 			return user2;
+
 	}
 
 	void setVersusUpdate(bool vRecord)

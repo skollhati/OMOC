@@ -23,7 +23,7 @@ int _tmain(int argc, char* argv[])
 
 
 
-	Sleep(3000);
+	
 	return 0;
 
 
