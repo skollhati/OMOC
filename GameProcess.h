@@ -1,6 +1,14 @@
 #ifndef __GAMEPROCESS_H__
 #define __GAMEPROCESS_H__
 
+//---------할 것들-----------
+//1.전적 저장
+//2.유저 이름 입력
+//3.칼라풀
+//4.UDP
+//4.한명 연결 종료시 종료할 것(heartbeat)
+//5.비정상 종료 대비
+
 #include "main.h"
 
 #define LEFT 75
@@ -22,6 +30,7 @@ typedef struct XY {
 class GameProcess {
 
 public:
+
 	GameProcess()
 	{
 		menu();
@@ -36,7 +45,9 @@ public:
 	void checkStone(xy hd, int GMap[MAP_Y][MAP_X], int turn);
 	void startGame(int GMap[MAP_Y][MAP_X]);
 	int searchStone(xy hd, int GMap[MAP_Y][MAP_X], int, int, int);
-
+	
+	void insertUser();
+	
 	void menu()
 	{
 		printf("> 2인용 오목 게임 \n");
@@ -53,7 +64,7 @@ public:
 
 private:
 	char cmd[256] = "\0";
-
+	
 };
 
 #endif // !__GAMEPROCESS_H__

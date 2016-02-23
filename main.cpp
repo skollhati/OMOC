@@ -19,9 +19,6 @@ int _tmain(int argc, char* argv[])
 	//int i;
 	//---------------------------오목 소스------------------------
 
-
-
-
 	GameProcess pGameProcess = GameProcess();
 
 

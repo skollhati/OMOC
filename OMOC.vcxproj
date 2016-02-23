@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="GameProcess.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="VersusInfo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
