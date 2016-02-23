@@ -95,7 +95,11 @@ void GameProcess::checkStone(xy hd, int GMap[MAP_Y][MAP_X], int turn)
 			}
 			printf("´ÔÀÌ ½Â¸®ÇÏ¼Ì½À´Ï´Ù.\n");
 			getch();
+
+			_tprintf(_T("%s win : %d / lose : %d\n"), vInfo->getUserInfo(1).name,vInfo->getUserInfo(1).win, vInfo->getUserInfo(1).lose);
+			_tprintf(_T("%s win : %d / lose : %d\n"), vInfo->getUserInfo(2).name,vInfo->getUserInfo(2).win, vInfo->getUserInfo(2).lose);
 			
+			Sleep(2000);
 			menu();
 			//exit(1);
 		}
