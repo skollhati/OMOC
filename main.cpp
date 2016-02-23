@@ -1,19 +1,9 @@
-#include"main.h"
+#include"GameProcess.h"
 
 char cmd[256] = "\0";
 
 //오목 소스
 
-#define LEFT 75
-#define RIGHT 77
-#define UP 72
-#define DOWN 80
-#define SPACE 32
-#define MAP_X 39
-#define MAP_Y 24
-#define ESC 27
-#define U1 1
-#define U2 2
 
 typedef struct XY {
 	int x;
