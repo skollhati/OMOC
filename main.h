@@ -1,8 +1,7 @@
 #ifndef __MAIN_H__
 #define __MAIN_H__
 
-#define UNICODE
-#define _UNICODE
+
 
 #include <stdio.h>
 #include<Windows.h>

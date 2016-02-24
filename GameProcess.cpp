@@ -6,6 +6,22 @@ void GameProcess::gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
+void GameProcess::setTextColor(COLORREF color)
+{
+	HANDLE hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_SCREEN_BUFFER_INFOEX csbi;
+
+	csbi.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
+	GetConsoleScreenBufferInfoEx(hConsoleOutput, &csbi);
+
+	csbi.ColorTable[1] = color;
+
+	SetConsoleScreenBufferInfoEx(hConsoleOutput, &csbi);
+	SetConsoleTextAttribute(hConsoleOutput, 1);
+	
+
+}
+
 void GameProcess::initGame()
 {
 	int i = 0, k = 0;

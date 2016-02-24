@@ -35,7 +35,6 @@ public:
 
 	GameProcess()
 	{
-		//LPTSTR un1 = _T(""), un2 = _T("");
 		TCHAR uName1[100];
 		TCHAR uName2[100];
 		
@@ -57,6 +56,7 @@ public:
 
 public:
 	void gotoxy(int x, int y);
+	void setTextColor(COLORREF color);
 	void initGame();
 	void checkStone(xy hd, int GMap[MAP_Y][MAP_X], int turn);
 	void startGame(int GMap[MAP_Y][MAP_X]);
