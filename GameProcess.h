@@ -24,10 +24,7 @@
 
 using namespace std;
 
-typedef struct XY {
-	int x;
-	int y;
-}xy;
+
 
 class GameProcess {
 
@@ -46,7 +43,7 @@ public:
 		_tprintf(_T("user1 : %s user2 : %s\n"),uName1,uName2);
 
 
-		vInfo = new VersusInfo(uName1, uName2);
+		vInfo = new VersusInfo(uName1);
 		menu();
 
 	}

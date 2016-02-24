@@ -6,6 +6,10 @@ void GameProcess::gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
+//원하는 색 지정 함수
+//setTextColor(RGB(255,128,0));
+//이미 있는 색상을 이용할 경우
+//setConsoleTextAttribute(핸들,색 지정);
 void GameProcess::setTextColor(COLORREF color)
 {
 	HANDLE hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -18,8 +22,6 @@ void GameProcess::setTextColor(COLORREF color)
 
 	SetConsoleScreenBufferInfoEx(hConsoleOutput, &csbi);
 	SetConsoleTextAttribute(hConsoleOutput, 1);
-	
-
 }
 
 void GameProcess::initGame()
@@ -57,8 +59,6 @@ void GameProcess::initGame()
 					printf("┴");
 			}
 		}
-
-
 		printf("\n");
 	}
 }
@@ -121,7 +121,6 @@ void GameProcess::checkStone(xy hd, int GMap[MAP_Y][MAP_X], int turn)
 		}
 	}
 }
-
 
 void GameProcess::startGame(int GMap[MAP_Y][MAP_X])
 {

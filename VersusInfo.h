@@ -16,13 +16,9 @@ public:
 	VersusInfo()
 	{}
 
-	VersusInfo(TCHAR U1[], TCHAR U2[])
+	VersusInfo(TCHAR uName[])
 	{
-		_tcscpy(user1.name, U1);
-		_tcscpy(user2.name, U2);
-
-		_tprintf(_T(" test :%s\n"), user1.name);
-		_tprintf(_T("%s\n"), user2.name);
+		_tcscpy(user.name, uName);
 	}
 
 	~VersusInfo()
@@ -32,29 +28,24 @@ public:
 	
 	USER_INFO getUserInfo(DWORD num) const
 	{
-		if (num == 1)
-			return user1;
-		else if (num == 2)
-			return user2;
 
+		return user;
 	}
 
 	void setVersusUpdate(bool vRecord)
 	{
 		if(vRecord)
 		{
-			user1.win++;
-			user2.lose++;
+			user.win++;
 		}
 		else
 		{
-			user2.win++;
-			user1.lose++;
+			user.lose++;
 		}
 	}
 
 private:
-	USER_INFO user1, user2;
+	USER_INFO user;
 };
 
 #endif // !__VERSUSINFO_H__

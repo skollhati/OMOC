@@ -21,6 +21,12 @@
     <ClCompile Include="GameProcess.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkProcess_UDP.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketSetcpp.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -30,6 +36,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="VersusInfo.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkProcess_UDP.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketSet.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

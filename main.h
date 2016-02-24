@@ -15,4 +15,10 @@
 #include<vector>
 #include<conio.h>
 
+typedef struct XY {
+	int x;
+	int y;
+}xy;
+
+
 #endif
