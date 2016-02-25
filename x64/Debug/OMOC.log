@@ -1,18 +1,9 @@
-﻿  PacketSet.cpp
-c:\users\kimchanyong\documents\omoc\packetset.cpp(30): warning C4996: 'wcscpy': This function or variable may be unsafe. Consider using wcscpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\corecrt_wstring.h(121): note: 'wcscpy' 선언을 참조하십시오.
-  NetworkProcess_UDP.cpp
-  main.cpp
-c:\users\kimchanyong\documents\omoc\main.cpp(25): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
-c:\users\kimchanyong\documents\omoc\main.cpp(113): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
-c:\users\kimchanyong\documents\omoc\main.cpp(129): warning C4996: 'kbhit': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _kbhit. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(458): note: 'kbhit' 선언을 참조하십시오.
-c:\users\kimchanyong\documents\omoc\main.cpp(131): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
-c:\users\kimchanyong\documents\omoc\main.cpp(193): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
-c:\users\kimchanyong\documents\omoc\main.cpp(186): warning C4101: 'i' :참조되지 않은 지역 변수입니다.
-  GameProcess.cpp
-  코드를 생성하고 있습니다...
-  OMOC.vcxproj -> C:\Users\KimChanYong\Documents\OMOC\x64\Debug\OMOC.exe
+﻿  NetworkProcess_UDP.cpp
+NetworkProcess_UDP.obj : error LNK2019: closesocket 외부 기호(참조 위치: "public: __cdecl NetWorkProcess_UDP::NetWorkProcess_UDP(void)" (??0NetWorkProcess_UDP@@QEAA@XZ) 함수)에서 확인하지 못했습니다.
+NetworkProcess_UDP.obj : error LNK2019: htons 외부 기호(참조 위치: "public: __cdecl NetWorkProcess_UDP::NetWorkProcess_UDP(void)" (??0NetWorkProcess_UDP@@QEAA@XZ) 함수)에서 확인하지 못했습니다.
+NetworkProcess_UDP.obj : error LNK2019: inet_addr 외부 기호(참조 위치: "public: __cdecl NetWorkProcess_UDP::NetWorkProcess_UDP(void)" (??0NetWorkProcess_UDP@@QEAA@XZ) 함수)에서 확인하지 못했습니다.
+NetworkProcess_UDP.obj : error LNK2019: sendto 외부 기호(참조 위치: "public: void __cdecl NetWorkProcess_UDP::SendPacket(wchar_t *)" (?SendPacket@NetWorkProcess_UDP@@QEAAXPEA_W@Z) 함수)에서 확인하지 못했습니다.
+NetworkProcess_UDP.obj : error LNK2019: socket 외부 기호(참조 위치: "public: __cdecl NetWorkProcess_UDP::NetWorkProcess_UDP(void)" (??0NetWorkProcess_UDP@@QEAA@XZ) 함수)에서 확인하지 못했습니다.
+NetworkProcess_UDP.obj : error LNK2019: WSAStartup 외부 기호(참조 위치: "public: __cdecl NetWorkProcess_UDP::NetWorkProcess_UDP(void)" (??0NetWorkProcess_UDP@@QEAA@XZ) 함수)에서 확인하지 못했습니다.
+NetworkProcess_UDP.obj : error LNK2019: WSACleanup 외부 기호(참조 위치: "public: __cdecl NetWorkProcess_UDP::NetWorkProcess_UDP(void)" (??0NetWorkProcess_UDP@@QEAA@XZ) 함수)에서 확인하지 못했습니다.
+C:\Users\KimChanYong\Documents\OMOC\x64\Debug\OMOC.exe : fatal error LNK1120: 7개의 확인할 수 없는 외부 참조입니다.

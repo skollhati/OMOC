@@ -7,6 +7,11 @@ void PacketSet::Init()
 	memset(m_szBuffr, 0, sizeof(m_szBuffr));
 }
 
+void PacketSet::PutSize()
+{
+	*(WORD *)(&m_szBuffr[0]) = m_iLen;
+}
+
 void PacketSet::PutBYTE(BYTE bByte)
 {
 	*(BYTE *)(&m_szBuffr[m_iLen]) = bByte;

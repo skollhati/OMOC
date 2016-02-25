@@ -33,16 +33,17 @@ public:
 	void    PutWORD(WORD	wWORD);
 	void    Putint(int      iint);
 	void	PutStr(TCHAR* sStr);
+	void	PutSize();
+	
 	void    GetInit(TCHAR*    ib_Buffer);
-
 	BYTE	GetBYTE(void);
 	WORD	GetWORD(void);
 	int		GetInt(void);
 	TCHAR*	GetStr(void);
 
+	WORD  m_iLen;
 
 private:
-	size_t  m_iLen;
 	TCHAR	m_szBuffr[2000];
 	TCHAR*  m_rzBuffr;
 
