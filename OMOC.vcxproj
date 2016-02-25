@@ -149,7 +149,7 @@
     <ClCompile Include="GameProcess.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetworkProcess_UDP.cpp" />
-    <ClCompile Include="PacketSetcpp.cpp" />
+    <ClCompile Include="PacketSet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameProcess.h" />

@@ -5,6 +5,12 @@
 
 
 
+PacketSet	sPacketSet;
+sPacketSet.Init();
+sPacketSet.PutBYTE(1);
+
+sPacketSet.Send(UserNum);
+
 
 
 
