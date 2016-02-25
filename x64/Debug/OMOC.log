@@ -1,9 +1,23 @@
-﻿  NetworkProcess_UDP.cpp
-NetworkProcess_UDP.obj : error LNK2019: closesocket 외부 기호(참조 위치: "public: __cdecl NetWorkProcess_UDP::NetWorkProcess_UDP(void)" (??0NetWorkProcess_UDP@@QEAA@XZ) 함수)에서 확인하지 못했습니다.
-NetworkProcess_UDP.obj : error LNK2019: htons 외부 기호(참조 위치: "public: __cdecl NetWorkProcess_UDP::NetWorkProcess_UDP(void)" (??0NetWorkProcess_UDP@@QEAA@XZ) 함수)에서 확인하지 못했습니다.
-NetworkProcess_UDP.obj : error LNK2019: inet_addr 외부 기호(참조 위치: "public: __cdecl NetWorkProcess_UDP::NetWorkProcess_UDP(void)" (??0NetWorkProcess_UDP@@QEAA@XZ) 함수)에서 확인하지 못했습니다.
-NetworkProcess_UDP.obj : error LNK2019: sendto 외부 기호(참조 위치: "public: void __cdecl NetWorkProcess_UDP::SendPacket(wchar_t *)" (?SendPacket@NetWorkProcess_UDP@@QEAAXPEA_W@Z) 함수)에서 확인하지 못했습니다.
-NetworkProcess_UDP.obj : error LNK2019: socket 외부 기호(참조 위치: "public: __cdecl NetWorkProcess_UDP::NetWorkProcess_UDP(void)" (??0NetWorkProcess_UDP@@QEAA@XZ) 함수)에서 확인하지 못했습니다.
-NetworkProcess_UDP.obj : error LNK2019: WSAStartup 외부 기호(참조 위치: "public: __cdecl NetWorkProcess_UDP::NetWorkProcess_UDP(void)" (??0NetWorkProcess_UDP@@QEAA@XZ) 함수)에서 확인하지 못했습니다.
-NetworkProcess_UDP.obj : error LNK2019: WSACleanup 외부 기호(참조 위치: "public: __cdecl NetWorkProcess_UDP::NetWorkProcess_UDP(void)" (??0NetWorkProcess_UDP@@QEAA@XZ) 함수)에서 확인하지 못했습니다.
-C:\Users\KimChanYong\Documents\OMOC\x64\Debug\OMOC.exe : fatal error LNK1120: 7개의 확인할 수 없는 외부 참조입니다.
+﻿  main.cpp
+c:\users\kimchanyong\documents\omoc\gameprocess.h(46): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
+  PacketSet.cpp
+c:\users\kimchanyong\documents\omoc\packetset.cpp(37): warning C4267: '+=': 'size_t'에서 'WORD'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\kimchanyong\documents\omoc\packetset.cpp(35): warning C4996: 'wcscpy': This function or variable may be unsafe. Consider using wcscpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\corecrt_wstring.h(121): note: 'wcscpy' 선언을 참조하십시오.
+c:\users\kimchanyong\documents\omoc\packetset.cpp(78): warning C4267: '+=': 'size_t'에서 'WORD'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  NetworkProcess_UDP.cpp
+c:\users\kimchanyong\documents\omoc\networkprocess_udp.cpp(19): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\8.1\include\um\winsock2.h(1850): note: 'inet_addr' 선언을 참조하십시오.
+  GameProcess.cpp
+c:\users\kimchanyong\documents\omoc\gameprocess.h(46): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
+c:\users\kimchanyong\documents\omoc\gameprocess.cpp(5): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+c:\users\kimchanyong\documents\omoc\gameprocess.cpp(92): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
+c:\users\kimchanyong\documents\omoc\gameprocess.cpp(110): warning C4996: 'kbhit': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _kbhit. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(458): note: 'kbhit' 선언을 참조하십시오.
+c:\users\kimchanyong\documents\omoc\gameprocess.cpp(112): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
+  코드를 생성하고 있습니다...
+  OMOC.vcxproj -> C:\Users\KimChanYong\Documents\OMOC\x64\Debug\OMOC.exe
