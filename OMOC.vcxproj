@@ -149,13 +149,15 @@
     <ClCompile Include="GameProcess.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetworkProcess_UDP.cpp" />
-    <ClCompile Include="PacketSetcpp.cpp" />
+    <ClCompile Include="PacketSet.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameLogic.h" />
     <ClInclude Include="GameProcess.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="NetworkProcess_UDP.h" />
     <ClInclude Include="PacketSet.h" />
+    <ClInclude Include="UserInfo.h" />
     <ClInclude Include="VersusInfo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
