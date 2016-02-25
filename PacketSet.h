@@ -16,17 +16,6 @@ typedef struct PACKET_STRUCT
 
 class PacketSet
 {
-	int		m_iLen;
-	char	m_szBuffr[2000];
-
-	void	Init();
-	void	PutBYTE(BYTE	bByte);
-	void    PutWORD(WORD	wWORD);
-	void    Putint(int      iint);
-
-	void    GetInit(char*    ib_Buffer);
-	BYTE	GetBYTE(void);
-
 
 public:
 	PacketSet()
@@ -36,7 +25,26 @@ public:
 	{}
 
 public:
-	TCHAR* PackedPacket(TCHAR message[], WORD command);
-	UnPacket UnpackPacket(TCHAR recvPacket[]);
+	//TCHAR* PackedPacket(TCHAR message[], WORD command);
+	//UnPacket UnpackPacket(TCHAR recvPacket[]);
+	
+	void	Init();
+	void	PutBYTE(BYTE	bByte);
+	void    PutWORD(WORD	wWORD);
+	void    Putint(int      iint);
+	void	PutStr(TCHAR* sStr);
+	void    GetInit(TCHAR*    ib_Buffer);
+	
+	BYTE	GetBYTE(void);
+	WORD	GetWORD(void);
+	int		GetInt(void);
+	TCHAR*	GetStr(void);
+
+
+private:
+	int		m_iLen;
+	TCHAR	m_szBuffr[2000];
+	TCHAR*  m_rzBuffr;
+
 };
 #endif
