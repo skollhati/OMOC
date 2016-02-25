@@ -1,54 +1,18 @@
-﻿  main.cpp
+﻿  PacketSet.cpp
+c:\users\kimchanyong\documents\omoc\packetset.cpp(30): warning C4996: 'wcscpy': This function or variable may be unsafe. Consider using wcscpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\corecrt_wstring.h(121): note: 'wcscpy' 선언을 참조하십시오.
+  NetworkProcess_UDP.cpp
+  main.cpp
 c:\users\kimchanyong\documents\omoc\main.cpp(25): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
-c:\users\kimchanyong\documents\omoc\main.cpp(113): error C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+c:\users\kimchanyong\documents\omoc\main.cpp(113): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
-c:\users\kimchanyong\documents\omoc\main.cpp(129): error C4996: 'kbhit': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _kbhit. See online help for details.
+c:\users\kimchanyong\documents\omoc\main.cpp(129): warning C4996: 'kbhit': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _kbhit. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(458): note: 'kbhit' 선언을 참조하십시오.
-c:\users\kimchanyong\documents\omoc\main.cpp(131): error C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+c:\users\kimchanyong\documents\omoc\main.cpp(131): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
-c:\users\kimchanyong\documents\omoc\main.cpp(193): error C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+c:\users\kimchanyong\documents\omoc\main.cpp(193): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
 c:\users\kimchanyong\documents\omoc\main.cpp(186): warning C4101: 'i' :참조되지 않은 지역 변수입니다.
-  PacketSet.cpp
-c:\users\kimchanyong\documents\omoc\packetset.cpp(4): error C2653: 'PacketSet': 클래스 또는 네임스페이스 이름이 아닙니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(6): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(7): error C2065: 'm_szBuffr': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(10): error C2653: 'PacketSet': 클래스 또는 네임스페이스 이름이 아닙니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(12): error C2065: 'm_szBuffr': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(12): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(13): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(16): error C2653: 'PacketSet': 클래스 또는 네임스페이스 이름이 아닙니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(18): error C2065: 'm_szBuffr': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(18): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(19): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(22): error C2653: 'PacketSet': 클래스 또는 네임스페이스 이름이 아닙니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(24): error C2065: 'm_szBuffr': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(24): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(25): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(28): error C2653: 'PacketSet': 클래스 또는 네임스페이스 이름이 아닙니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(30): error C2065: 'm_szBuffr': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(30): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(32): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(33): error C2065: 'm_szBuffr': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(33): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(34): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(37): error C2653: 'PacketSet': 클래스 또는 네임스페이스 이름이 아닙니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(39): error C2065: 'm_rzBuffr': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(40): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(43): error C2653: 'PacketSet': 클래스 또는 네임스페이스 이름이 아닙니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(45): error C2065: 'm_rzBuffr': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(45): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(46): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(53): error C2653: 'PacketSet': 클래스 또는 네임스페이스 이름이 아닙니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(56): error C2065: 'm_rzBuffr': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(56): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(57): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(62): error C2653: 'PacketSet': 클래스 또는 네임스페이스 이름이 아닙니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(64): error C2065: 'm_rzBuffr': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(64): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(65): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(70): error C2653: 'PacketSet': 클래스 또는 네임스페이스 이름이 아닙니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(72): error C2065: 'm_rzBuffr': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(72): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
-c:\users\kimchanyong\documents\omoc\packetset.cpp(73): error C2065: 'm_iLen': 선언되지 않은 식별자입니다.
+  GameProcess.cpp
   코드를 생성하고 있습니다...
+  OMOC.vcxproj -> C:\Users\KimChanYong\Documents\OMOC\x64\Debug\OMOC.exe

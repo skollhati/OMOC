@@ -42,7 +42,7 @@ public:
 
 
 private:
-	int		m_iLen;
+	size_t  m_iLen;
 	TCHAR	m_szBuffr[2000];
 	TCHAR*  m_rzBuffr;
 
