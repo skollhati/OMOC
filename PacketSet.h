@@ -27,7 +27,7 @@ public:
 public:
 	//TCHAR* PackedPacket(TCHAR message[], WORD command);
 	//UnPacket UnpackPacket(TCHAR recvPacket[]);
-
+	
 	void	Init();
 	void	PutBYTE(BYTE	bByte);
 	void    PutWORD(WORD	wWORD);
@@ -40,8 +40,11 @@ public:
 	WORD	GetWORD(void);
 	int		GetInt(void);
 	TCHAR*	GetStr(void);
+	WORD	GetSize(void);
+	
+	
+	int		m_iLen;
 
-	WORD  m_iLen;
 
 private:
 	TCHAR	m_szBuffr[2000];

@@ -5,6 +5,12 @@
 
 
 
+PacketSet	sPacketSet;
+sPacketSet.Init();
+sPacketSet.PutBYTE(1);
+
+sPacketSet.Send(UserNum);
+
 
 
 
@@ -19,14 +25,11 @@ int _tmain(int argc, char* argv[])
 	//int i;
 	//---------------------------오목 소스------------------------
 
-
-
-
 	GameProcess pGameProcess = GameProcess();
 
 
 
-	Sleep(3000);
+	
 	return 0;
 
 

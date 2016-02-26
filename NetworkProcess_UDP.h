@@ -8,7 +8,7 @@ class NetWorkProcess_UDP
 {
 public:
 	NetWorkProcess_UDP();
-	
+
 
 	~NetWorkProcess_UDP()
 	{}
@@ -22,12 +22,12 @@ public:
 
 	WSADATA wsaData;
 	SOCKET ClientSocket;
-	
+
 	SOCKADDR_IN ToServer;
 	SOCKADDR_IN FromServer;
-	
+
 	PacketSet pPacket;
-	
+
 	DWORD fSize;
 	DWORD Recv_Size;
 	DWORD Send_Size;

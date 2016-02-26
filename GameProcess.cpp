@@ -6,6 +6,24 @@ void GameProcess::gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
+//원하는 색 지정 함수
+//setTextColor(RGB(255,128,0));
+//이미 있는 색상을 이용할 경우
+//setConsoleTextAttribute(핸들,색 지정);
+void GameProcess::setTextColor(COLORREF color)
+{
+	HANDLE hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_SCREEN_BUFFER_INFOEX csbi;
+
+	csbi.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
+	GetConsoleScreenBufferInfoEx(hConsoleOutput, &csbi);
+
+	csbi.ColorTable[1] = color;
+
+	SetConsoleScreenBufferInfoEx(hConsoleOutput, &csbi);
+	SetConsoleTextAttribute(hConsoleOutput, 1);
+}
+
 void GameProcess::initGame()
 {
 	int i = 0, k = 0;
@@ -41,8 +59,6 @@ void GameProcess::initGame()
 					printf("┴");
 			}
 		}
-
-
 		printf("\n");
 	}
 }
@@ -84,19 +100,27 @@ void GameProcess::checkStone(xy hd, int GMap[MAP_Y][MAP_X], int turn)
 		{
 			gotoxy(0, MAP_Y);
 			if (turn == U1)
-				printf("사용자 1");
+			{
+				_tprintf(_T("%s"), vInfo->getUserInfo(1).name);
+				vInfo->setVersusUpdate(true);
+			}
 			else
-				printf("사용자 2");
-
-			printf("님이 승리하셨습니다.");
+			{
+				_tprintf(_T("%s"), vInfo->getUserInfo(2).name);
+				vInfo->setVersusUpdate(false);
+			}
+			printf("님이 승리하셨습니다.\n");
 			getch();
 
+			_tprintf(_T("%s win : %d / lose : %d\n"), vInfo->getUserInfo(1).name,vInfo->getUserInfo(1).win, vInfo->getUserInfo(1).lose);
+			_tprintf(_T("%s win : %d / lose : %d\n"), vInfo->getUserInfo(2).name,vInfo->getUserInfo(2).win, vInfo->getUserInfo(2).lose);
+			
+			Sleep(2000);
 			menu();
 			//exit(1);
 		}
 	}
 }
-
 
 void GameProcess::startGame(int GMap[MAP_Y][MAP_X])
 {

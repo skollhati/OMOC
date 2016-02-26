@@ -32,13 +32,13 @@ void PacketSet::Putint(int iint)
 
 void PacketSet::PutStr(TCHAR* sStr)
 {
-	_tcscpy(&m_szBuffr[m_iLen],sStr);
+	_tcscpy(&m_szBuffr[m_iLen], sStr);
 
 	m_iLen += _tcslen(sStr);
 	*(WORD*)(&m_szBuffr[m_iLen]) = 0;
 	m_iLen += 2;
 }
- 
+
 void PacketSet::GetInit(TCHAR* ib_Buffer)
 {
 	m_rzBuffr = ib_Buffer;
@@ -49,15 +49,22 @@ BYTE PacketSet::GetBYTE()
 {
 	BYTE bByte = *(BYTE *)&m_rzBuffr[m_iLen];
 	m_iLen += sizeof(BYTE);
-	
+
 	return bByte;
 }
 
 
+WORD PacketSet::GetSize()
+{
+	WORD wSize = *(WORD *)&m_rzBuffr[m_iLen];
+	
+	
+	return wSize;
+}
 
 WORD PacketSet::GetWORD()
 {
-	
+
 	WORD wWORD = *(WORD *)&m_rzBuffr[m_iLen];
 	m_iLen += sizeof(WORD);
 
@@ -68,15 +75,15 @@ int PacketSet::GetInt()
 {
 	int iINT = *(int *)&m_rzBuffr[m_iLen];
 	m_iLen += sizeof(int);
-	
+
 	return iINT;
 }
 
 TCHAR* PacketSet::GetStr()
-{	
+{
 	TCHAR* sStr = &m_rzBuffr[m_iLen];
 	m_iLen += _tcslen(sStr) + 2;
-	
+
 	return sStr;
 }
 

@@ -29,26 +29,52 @@ NetWorkProcess_UDP::NetWorkProcess_UDP()
 		exit(0);
 	}
 
-	
+
 }
 
 void NetWorkProcess_UDP::ReceivePacket()
 {
+	TCHAR buffer[BUFFER_SIZE];
 
+	int FromSever_Size = sizeof(FromServer);
 
+	while (1)
+	{
+		Recv_Size = recvfrom(ClientSocket, (char *)buffer, BUFFER_SIZE, 0, (struct sockaddr*)&FromServer, &FromSever_Size);
+
+		if (Recv_Size == 0)
+		{
+			cout << "recvForm() error! " << endl;
+
+		}
+		pPacket.GetInit(buffer);
+		if (Recv_Size >= pPacket.GetSize())
+		{
+			break;
+		}
+	}
+
+	cout << "Recv From " << inet_ntoa(FromServer.sin_addr) << endl;
+	cout << "DATA : " << buffer << endl;
 }
 
 void NetWorkProcess_UDP::SendPacket(TCHAR* Buffer)
 {
+
 	pPacket.PutWORD(2);
 	pPacket.PutStr(Buffer);
 	pPacket.PutSize();
-	Send_Size = sendto(ClientSocket, (const char*)Buffer, BUFFER_SIZE, 0, (struct sockaddr*)&ToServer, sizeof(ToServer));
-	
-	
-	if (Send_Size != pPacket.m_iLen)
-	{
 
+	while (1)
+	{
+		Send_Size = sendto(ClientSocket, (const char*)Buffer, BUFFER_SIZE, 0, (struct sockaddr*)&ToServer, sizeof(ToServer));
+
+		if (Send_Size == pPacket.m_iLen)
+		{
+			break;
+		}
 	}
+
+	pPacket.Init();
 
 }
