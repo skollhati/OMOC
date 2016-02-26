@@ -2,11 +2,14 @@
 #define __PACKETSET_H__
 
 #include"main.h"
-#include "VersusInfo.h"
+
 
 #define MESSAGE_REN 100
 #define USER_REN 50
 #define BUFFER_SIZE 1024
+
+
+
 
 typedef struct PACKET_STRUCT
 {

@@ -24,4 +24,14 @@ typedef struct XY {
 }xy;
 
 
+typedef struct SOCKET_DATA
+{
+	WORD wUserNum;
+	char ipAddr[30];
+	int iPort;
+	int time;
+	bool bOnOff;
+}*PSOCKET_OBJ;
+
+
 #endif
