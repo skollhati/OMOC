@@ -56,9 +56,8 @@ BYTE PacketSet::GetBYTE()
 
 WORD PacketSet::GetSize()
 {
-	WORD wSize = *(WORD *)&m_rzBuffr[m_iLen];
-	
-	
+	WORD wSize = *(WORD *)&m_rzBuffr[0];
+
 	return wSize;
 }
 

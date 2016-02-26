@@ -23,7 +23,8 @@ public:
 	WORD CheckUserNum(char* ipAddr,int iPort);
 	void SendPacket(TCHAR* Buffer);
 	void ReceivePacket();
-	void UDPRecive(WORD UserNum,WORD wCom,TCHAR* buffer,WORD wSize);
+	void UDPRecive(WORD UserNum,TCHAR* buffer,WORD wSize);
+	void IniSocketObj();
 	PSOCKET_OBJ InUserVector(char* ipAddr);
 public:
 
