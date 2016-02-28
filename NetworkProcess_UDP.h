@@ -5,15 +5,14 @@
 #include "PacketSet.h"
 
 
-#define USER_IN 1
-#define USER_OUT 4
-#define GAME_COMMAND 100
-#define HEARTBEAT 5
 
 class NetWorkProcess_UDP
 {
 public:
-	NetWorkProcess_UDP();
+	NetWorkProcess_UDP()
+	{}
+
+	NetWorkProcess_UDP(GameProcess *pGame);
 
 
 	~NetWorkProcess_UDP()
@@ -21,25 +20,38 @@ public:
 
 public:
 	WORD CheckUserNum(char* ipAddr,int iPort);
-	void SendPacket(TCHAR* Buffer);
+	BOOL SendPacket(WORD com,TCHAR* Buffer);
 	void ReceivePacket();
 	void UDPRecive(WORD UserNum,TCHAR* buffer,WORD wSize);
 	void IniSocketObj();
+	void HeartBeatTimerReset();
+	XY strToXY(TCHAR* sPacket);
 	PSOCKET_OBJ InUserVector(char* ipAddr);
+
+	static UINT WINAPI CheckHeartBeat(LPVOID lpParam);
+	
 public:
 
 	WSADATA wsaData;
 	SOCKET ClientSocket;
-
 	SOCKADDR_IN ToServer;
 	SOCKADDR_IN FromServer;
-
+	
+	
+	
+	GameProcess* pGameProc;
 	PacketSet pPacket;
 
+	bool sending = false;
 	DWORD wUserCount;
 	DWORD fSize;
 	DWORD Recv_Size;
 	DWORD Send_Size;
+
+	HANDLE hTimer;
+	HANDLE hHeartBeat;
+	LARGE_INTEGER liDueTime = -300000000;
+
 	vector<PSOCKET_OBJ> vSocketData;
 };
 

@@ -59,11 +59,12 @@ void GameProcess::initGame()
 					printf("┴");
 			}
 		}
+		hd = { MAP_X / 2,MAP_Y / 2 };
 		printf("\n");
 	}
 }
 
-int GameProcess::searchStone(xy hd, int GMap[MAP_Y][MAP_X], int flag, int p, int sw)
+int GameProcess::searchStone(xy hd, int flag, int p, int sw)
 {
 	if (GMap[hd.y][hd.x] != flag) return 0;
 	if (p == 0)
@@ -84,37 +85,37 @@ int GameProcess::searchStone(xy hd, int GMap[MAP_Y][MAP_X], int flag, int p, int
 		hd.x += sw;
 		hd.y -= sw;
 	}
-	return 1 + searchStone(hd, GMap, flag, p, sw);
+	return 1 + searchStone(hd, flag, p, sw);
 }
 
-void GameProcess::checkStone(xy hd, int GMap[MAP_Y][MAP_X], int turn)
+void GameProcess::checkStone(xy hd,  int turn)
 {
 	int i = 0, countStone = 0;
 	for (i = 0; i < 4; i++)
 	{
 		countStone = 0;
-		countStone += searchStone(hd, GMap, turn, i, 1);
-		countStone += searchStone(hd, GMap, turn, i, -1);
+		countStone += searchStone(hd, turn, i, 1);
+		countStone += searchStone(hd,  turn, i, -1);
 
 		if (countStone == 6)
 		{
 			gotoxy(0, MAP_Y);
-			if (turn == U1)
+			if (turn == MY_TURN)
 			{
-				_tprintf(_T("%s"), vInfo->getUserInfo(1).name);
-				vInfo->setVersusUpdate(true);
+				_tprintf(_T("%s"), player);
+				//vInfo->setVersusUpdate(true);
 			}
 			else
 			{
-				_tprintf(_T("%s"), vInfo->getUserInfo(2).name);
-				vInfo->setVersusUpdate(false);
+				_tprintf(_T("%s"), rival);
+				//vInfo->setVersusUpdate(false);
 			}
 			printf("님이 승리하셨습니다.\n");
 			getch();
-
-			_tprintf(_T("%s win : %d / lose : %d\n"), vInfo->getUserInfo(1).name,vInfo->getUserInfo(1).win, vInfo->getUserInfo(1).lose);
-			_tprintf(_T("%s win : %d / lose : %d\n"), vInfo->getUserInfo(2).name,vInfo->getUserInfo(2).win, vInfo->getUserInfo(2).lose);
 			
+			//searchstone 함수 연산을 서버에서 처리하는 방식으로 바꿀 것
+
+				
 			Sleep(2000);
 			menu();
 			//exit(1);
@@ -122,12 +123,10 @@ void GameProcess::checkStone(xy hd, int GMap[MAP_Y][MAP_X], int turn)
 	}
 }
 
-void GameProcess::startGame(int GMap[MAP_Y][MAP_X])
+void GameProcess::startGame()
 {
 	char ip = '\0';
-	int turn = U1;
 
-	xy hd = { MAP_X / 2,MAP_Y / 2 };
 
 	while (1)
 	{
@@ -157,27 +156,58 @@ void GameProcess::startGame(int GMap[MAP_Y][MAP_X])
 				{
 					gotoxy(hd.x * 2, hd.y);
 
-					if (turn == U1)
+					if (turn == MY_TURN)
 					{
-						GMap[hd.y][hd.x] = U1;
-						printf("●");
-						checkStone(hd, GMap, turn);
-						turn = U2;
-					}
-					else
-					{
-						GMap[hd.y][hd.x] = U2;
-						printf("○");
-						checkStone(hd, GMap, turn);
-						turn = U1;
+						GMap[hd.y][hd.x] = MY_TURN;
+						printf("%s",my_stone);
+						checkStone(hd, turn);
+						m_pNetProc->SendPacket(GAME_COMMAND,(TCHAR*)&hd);
+						turn = RIVAL_TURN;
 					}
 				}
 				break;
 			case ESC:
+				m_pNetProc->SendPacket(USER_OUT, NULL);
 				exit(1);
 				break;
 			}
 			gotoxy(hd.x * 2, hd.y);
 		}
+	}
+}
+
+void GameProcess::RivalStoneInput(int y ,int x)
+{
+	GMap[y][x] = RIVAL_TURN;
+	printf("%s",rival_stone);
+	checkStone(hd, turn);
+	turn = MY_TURN;
+}
+
+void GameProcess::setNetworkProc(NetWorkProcess_UDP* pNetProc)
+{
+	m_pNetProc = pNetProc;
+}
+
+void GameProcess::WaitingRival()
+{
+
+}
+
+void GameProcess::setGame(MATCHING match)
+{
+	_tcscpy(rival, match.rivalName);
+
+	if (match.fPlay)
+	{ 
+		strcpy(my_stone,"●");
+		strcpy(rival_stone, "○");
+		turn = MY_TURN;
+	}
+	else
+	{ 
+		strcpy(my_stone, "○");
+		strcpy(rival_stone, "●");
+		turn = RIVAL_TURN;
 	}
 }

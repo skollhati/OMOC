@@ -1,15 +1,13 @@
-#include"GameProcess.h"
-
-
+#include "main.h"
 //坷格 家胶
 
 
 
-PacketSet	sPacketSet;
-sPacketSet.Init();
-sPacketSet.PutBYTE(1);
-
-sPacketSet.Send(UserNum);
+//PacketSet	sPacketSet;
+//sPacketSet.Init();
+//sPacketSet.PutBYTE(1);
+//
+//sPacketSet.Send(UserNum);
 
 
 
@@ -26,7 +24,7 @@ int _tmain(int argc, char* argv[])
 	//---------------------------坷格 家胶------------------------
 
 	GameProcess pGameProcess = GameProcess();
-
+	NetWorkProcess_UDP pNetwork = NetWorkProcess_UDP(&pGameProcess);
 
 
 	
