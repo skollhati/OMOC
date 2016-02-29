@@ -6,6 +6,7 @@ using namespace std;
 NetWorkProcess_UDP::NetWorkProcess_UDP()
 {
 	
+	InitializeCriticalSection(&m_cs);
 	short port_num = 8800;
 	wUserCount = 0;
 	hSend = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -147,6 +148,24 @@ BOOL NetWorkProcess_UDP::SendPacket(WORD com,TCHAR* Buffer)
 	}
 
 	return false;
+}
+
+UINT WINAPI NetWorkProcess_UDP::SendThread(LPVOID lpParam)
+{
+	
+	NetWorkProcess_UDP* m_NetProc = (NetWorkProcess_UDP *)lpParam;
+
+	
+	while (1)
+	{
+		WaitForSingleObject(m_NetProc->hSend, INFINITE);
+		//try-catch
+		EnterCriticalSection(&m_cs);
+		UNPACK_DATA *unpack = m_NetProc->pGameProc->q_SendData.front();
+		m_NetProc->SendPacket(unpack->com, unpack->buf);
+		LeaveCriticalSection(&m_cs);
+	}
+
 }
 
 UNPACK_DATA NetWorkProcess_UDP::UDPRecive(WORD UserNum, TCHAR* buffer, WORD wSize)

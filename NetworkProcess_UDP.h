@@ -4,6 +4,7 @@
 #include "main.h"
 #include "GameProcess.h"
 
+static CRITICAL_SECTION m_cs;
 
 class NetWorkProcess_UDP
 {
@@ -19,16 +20,18 @@ public:
 
 public:
 	WORD CheckUserNum(char* ipAddr,int iPort);
-	BOOL SendPacket(WORD com,TCHAR* Buffer);
+	 BOOL SendPacket(WORD com,TCHAR* Buffer);
 	void ReceivePacket();
 	UNPACK_DATA UDPRecive(WORD UserNum,TCHAR* buffer,WORD wSize);
 	void IniSocketObj();
 	void HeartBeatTimerReset();
 	XY strToXY(TCHAR* sPacket);
 	PSOCKET_OBJ InUserVector(char* ipAddr);
-
-	static UINT WINAPI CheckHeartBeat(LPVOID lpParam);
 	
+	static UINT WINAPI CheckHeartBeat(LPVOID lpParam);
+	static UINT WINAPI SendThread(LPVOID lpParam);
+	static UINT WINAPI ReceiveThread(LPVOID lpParam);
+
 public:
 	GameProcess* pGameProc;
 	WSADATA wsaData;
@@ -36,7 +39,7 @@ public:
 	SOCKADDR_IN ToServer;
 	SOCKADDR_IN FromServer;
 	
-	PacketSet pPacket;
+	static PacketSet pPacket;
 
 	bool sending = false;
 	DWORD wUserCount;
