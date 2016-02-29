@@ -24,9 +24,9 @@ void GameProcess::setTextColor(COLORREF color)
 	SetConsoleTextAttribute(hConsoleOutput, 1);
 }
 
-GameProcess::GameProcess()
+GameProcess::GameProcess(HANDLE* p_hSend)
 {
-	m_pNetProc = new NetWorkProcess_UDP();
+	hSend = p_hSend;
 
 	hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
@@ -135,6 +135,15 @@ void GameProcess::checkStone(xy hd,  int turn)
 	}
 }
 
+void GameProcess::SendEvent(WORD com, TCHAR* buf)
+{
+	UNPACK_DATA* unpack_data;
+	unpack_data->com = com;
+	_tcscpy(unpack_data->buf, buf);
+	this->q_SendData.push(unpack_data);
+	SetEvent(*hSend);
+}
+
 void GameProcess::startGame()
 {
 	char ip = '\0';
@@ -173,13 +182,16 @@ void GameProcess::startGame()
 						GMap[hd.y][hd.x] = MY_TURN;
 						printf("%s",my_stone);
 						checkStone(hd, turn);
-						m_pNetProc->SendPacket(GAME_COMMAND,(TCHAR*)&hd);
+						SendEvent(GAME_COMMAND, (TCHAR*)&hd);
+						//m_pNetProc->SendPacket(GAME_COMMAND,(TCHAR*)&hd);
 						turn = RIVAL_TURN;
 					}
 				}
 				break;
 			case ESC:
-				m_pNetProc->SendPacket(USER_OUT, NULL);
+				SendEvent(USER_OUT, NULL);
+
+				//m_pNetProc->SendPacket(USER_OUT, NULL);
 				exit(1);
 				break;
 			}
@@ -205,11 +217,10 @@ void GameProcess::menu()
 	printf("게임을 시작하려면 아무키나 누르세요");
 	getch();
 	system("cls");
-
-	m_pNetProc->SendPacket(USER_IN, player);
+	SendEvent(USER_IN, player);
+	//m_pNetProc->SendPacket(USER_IN, player);
 
 	_tprintf(_T("대전 상대를 기다립니다....\n"));
-	m_pNetProc->ReceivePacket();
 	WaitForSingleObject(hEvent, INFINITE);
 
 	_tprintf(_T("매칭 완료!! 5초 후 게임을 시작합니다!\n"));
@@ -221,6 +232,7 @@ void GameProcess::menu()
 
 	startGame();
 }
+
 void GameProcess::WaitingRival()
 {
 

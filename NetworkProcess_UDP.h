@@ -2,7 +2,7 @@
 #define __NETWORK_UDP_H__
 
 #include "main.h"
-
+#include "GameProcess.h"
 
 
 class NetWorkProcess_UDP
@@ -30,16 +30,12 @@ public:
 	static UINT WINAPI CheckHeartBeat(LPVOID lpParam);
 	
 public:
-
+	GameProcess* pGameProc;
 	WSADATA wsaData;
 	SOCKET ClientSocket;
 	SOCKADDR_IN ToServer;
 	SOCKADDR_IN FromServer;
 	
-	
-	
-	
-
 	PacketSet pPacket;
 
 	bool sending = false;
@@ -48,11 +44,12 @@ public:
 	DWORD Recv_Size;
 	DWORD Send_Size;
 
+	HANDLE hSend;
 	HANDLE hTimer;
 	HANDLE hHeartBeat;
 	LARGE_INTEGER liDueTime;
 
-	queue<UNPACK_DATA> qUnpackData;
+	
 	vector<PSOCKET_OBJ> vSocketData;
 };
 

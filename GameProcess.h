@@ -8,7 +8,8 @@
 //5.비정상 종료 대비
 
 #include "main.h"
-#include "NetworkProcess_UDP.h"
+
+
 
 #define LEFT 75
 #define RIGHT 77
@@ -30,7 +31,7 @@ using namespace std;
 class GameProcess {
 
 public:
-	GameProcess();
+	GameProcess(HANDLE* p_hSend);
 	
 
 	//GameProcess(NetWorkProcess_UDP* pNetProc);
@@ -45,36 +46,30 @@ public:
 	void checkStone(xy hd, int turn);
 	void startGame();
 	void setGame(MATCHING match);
-//	void setNetworkProc(NetWorkProcess_UDP* pNetProc );
 	void RivalStoneInput(int y, int x);
 	void WaitingRival();
 	int searchStone(xy hd, int, int, int);
-	
-
-	
-	
 	void menu();
-
+	void SendEvent(WORD com, TCHAR* buf);
 public:
-	
+
+	HANDLE *hSend;
 	HANDLE hEvent;
 	char my_stone[3];
 	char rival_stone[3];
-
-	NetWorkProcess_UDP* m_pNetProc;
+	queue<UNPACK_DATA*> q_SendData;
+	
 
 private:
 	
 	int GMap[MAP_Y][MAP_X];
 	char cmd[256] = "\0";
 	int turn = 0;
+
 	xy hd;
-
-	
-
 	TCHAR player[50];
 	TCHAR rival[50];
-	//VersusInfo* vInfo;
+
 };
 
 #endif // !__GAMEPROCESS_H__

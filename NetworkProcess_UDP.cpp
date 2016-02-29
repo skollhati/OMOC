@@ -8,8 +8,11 @@ NetWorkProcess_UDP::NetWorkProcess_UDP()
 	
 	short port_num = 8800;
 	wUserCount = 0;
-	
+	hSend = CreateEvent(NULL, FALSE, FALSE, NULL);
 	hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
+
+
+	pGameProc = new GameProcess(&hSend);
 
 	if (WSAStartup(0x202, &wsaData) == SOCKET_ERROR)
 	{
@@ -73,7 +76,7 @@ void NetWorkProcess_UDP::ReceivePacket()
 			//접속 허용 용량 벗어남 알림
 		}
 
-		qUnpackData.push( UDPRecive(wUserNum, buffer, Recv_Size));
+		UDPRecive(wUserNum, buffer, Recv_Size);
 	}
 
 	cout << "Recv From " << inet_ntoa(FromServer.sin_addr) << endl;
@@ -154,29 +157,28 @@ UNPACK_DATA NetWorkProcess_UDP::UDPRecive(WORD UserNum, TCHAR* buffer, WORD wSiz
 	//사이즈에 맞게 온 함수일 경우 차례대로 진행 아닐 경우 무시
 	if (pPacket.GetSize() == wSize)
 	{
-		m_Unpack.com = pPacket.GetWORD();
-		_tcscpy(m_Unpack.buf, pPacket.GetStr());
+		
 
 
-		//switch (pPacket.GetWORD())
-		//{
-		//case MATCHING_GAME:
-		//	//선공 후공(0,1) + 상대 아이디
-		//	/*MATCHING match_game = *(MATCHING *)pPacket.GetStr();
-		//	pGameProc->setGame(match_game);
-		//	SetEvent(pGameProc->hEvent);*/
-		//	break;
+		switch (pPacket.GetWORD())
+		{
+		case MATCHING_GAME:
+			//선공 후공(0,1) + 상대 아이디
+			MATCHING match_game = *(MATCHING *)pPacket.GetStr();
+			pGameProc->setGame(match_game);
+			SetEvent(pGameProc->hEvent);
+			break;
 
-		//case GAME_COMMAND:
-		//	/*XY temp_xy = strToXY(pPacket.GetStr());
-		//	pGameProc->RivalStoneInput(temp_xy.y, temp_xy.x);*/
-		//	break;
+		case GAME_COMMAND:
+			XY temp_xy = strToXY(pPacket.GetStr());
+			pGameProc->RivalStoneInput(temp_xy.y, temp_xy.x);
+			break;
 
-		//case GAME_INFO:
-		//	//승패
-		//	//게임 결과 유저정보 갱신 (상대편 정보도 표시)
-		//	break;
-		//}
+		case GAME_INFO:
+			//승패
+			//게임 결과 유저정보 갱신 (상대편 정보도 표시)
+			break;
+		}
 
 	}
 	else
