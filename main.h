@@ -16,8 +16,15 @@
 #include<vector>
 #include<conio.h>
 
+#define USER_IN 1				//서버 접속에 사용
+#define USER_OUT 4				//서버 로그아웃에 사용
+#define MATCHING_GAME 7			//대전 상대와 게임을 한다는 것을 알림
+#define GAME_COMMAND 100		//돌의 움직임을 알림
+#define GAME_INFO 101			//게임 결과 알림
+#define HEARTBEAT 5				//접속 중임을 주기적으로 알림
 
 using namespace std;
+
 typedef struct XY {
 	int x;
 	int y;
@@ -32,6 +39,20 @@ typedef struct SOCKET_DATA
 	int time;
 	bool bOnOff;
 }*PSOCKET_OBJ;
+
+typedef struct MATCHING
+{
+	bool fPlay;
+	TCHAR rivalName[50];
+};
+#include"GameProcess.h"
+#include "NetworkProcess_UDP.h"
+
+
+
+
+
+
 
 
 #endif

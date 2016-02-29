@@ -3,10 +3,14 @@
 #include <iostream>
 using namespace std;
 
-NetWorkProcess_UDP::NetWorkProcess_UDP()
+NetWorkProcess_UDP::NetWorkProcess_UDP(GameProcess *rGame)
 {
 	short port_num = 8800;
 	wUserCount = 0;
+	pGameProc = rGame;
+	pGameProc->setNetworkProc(this);
+	
+	hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
 
 	if (WSAStartup(0x202, &wsaData) == SOCKET_ERROR)
 	{
@@ -31,9 +35,8 @@ NetWorkProcess_UDP::NetWorkProcess_UDP()
 		exit(0);
 	}
 
+	hHeartBeat = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::CheckHeartBeat, (LPVOID)this, 0,NULL);
 	IniSocketObj();
-
-
 }
 
 //유저소켓정보 객체 초기화
@@ -125,25 +128,23 @@ PSOCKET_OBJ NetWorkProcess_UDP::InUserVector(char* ipAddr)
 	return pEmptyObj;
 }
 
-void NetWorkProcess_UDP::SendPacket(TCHAR* Buffer)
+BOOL NetWorkProcess_UDP::SendPacket(WORD com,TCHAR* Buffer)
 {
-
-	pPacket.PutWORD(2);
+	pPacket.Init();
+	pPacket.PutWORD(com);
 	pPacket.PutStr(Buffer);
 	pPacket.PutSize();
 
-	while (1)
-	{
-		Send_Size = sendto(ClientSocket, (const char*)Buffer, BUFFER_SIZE, 0, (struct sockaddr*)&ToServer, sizeof(ToServer));
 
-		if (Send_Size == pPacket.m_iLen)
-		{
-			break;
-		}
+	Send_Size = sendto(ClientSocket, (const char*)Buffer, BUFFER_SIZE, 0, (struct sockaddr*)&ToServer, sizeof(ToServer));
+
+	if (Send_Size == pPacket.m_iLen)
+	{
+		HeartBeatTimerReset();
+		return true;
 	}
 
-	pPacket.Init();
-
+	return false;
 }
 
 void NetWorkProcess_UDP::UDPRecive(WORD UserNum, TCHAR* buffer, WORD wSize)
@@ -154,20 +155,55 @@ void NetWorkProcess_UDP::UDPRecive(WORD UserNum, TCHAR* buffer, WORD wSize)
 	{
 		switch (pPacket.GetWORD())
 		{
-		case USER_IN:
-			//게임 연결 대상 찾아주기
+		case MATCHING_GAME:
+			//선공 후공(0,1) + 상대 아이디
+			MATCHING match_game = *(MATCHING *)pPacket.GetStr();
+			pGameProc->setGame(match_game);
+			SetEvent(pGameProc->hEvent);
 			break;
-		case USER_OUT:
-			//해당 소켓 아웃 및 객체 삭제
-			break;
+
 		case GAME_COMMAND:
-			//커맨드 함수 GameProcess객체로 넘겨주기
+			XY temp_xy = strToXY(pPacket.GetStr());
+			pGameProc->RivalStoneInput(temp_xy.y, temp_xy.x);
+			break;
+
+		case GAME_INFO:
+			//승패
+			//게임 결과 유저정보 갱신 (상대편 정보도 표시)
 			break;
 		}
 	}
 }
 
+XY NetWorkProcess_UDP::strToXY(TCHAR* sPacket)
+{
 
+	XY unpack_xy = *(XY *)&sPacket[0];
+
+	return unpack_xy;
+}
+
+void NetWorkProcess_UDP::HeartBeatTimerReset()
+{
+	CancelWaitableTimer(hTimer);
+	SetWaitableTimer(hTimer, &liDueTime, 30000, NULL, NULL, FALSE);
+}
+
+UINT WINAPI NetWorkProcess_UDP::CheckHeartBeat(LPVOID lpParam)
+{
+	
+	NetWorkProcess_UDP* m_NetProc = (NetWorkProcess_UDP *)lpParam;
+	SetWaitableTimer(m_NetProc->hTimer, &(m_NetProc->liDueTime), 30000, NULL, NULL, FALSE);
+	
+	while (1)
+	{
+		WaitForSingleObject(m_NetProc->hTimer,INFINITE);
+		m_NetProc->SendPacket(HEARTBEAT, NULL);
+	}
+
+
+	return 0;
+}
 
 
 
