@@ -2,17 +2,16 @@
 #define __NETWORK_UDP_H__
 
 #include "main.h"
-#include "PacketSet.h"
 
 
 
 class NetWorkProcess_UDP
 {
 public:
-	NetWorkProcess_UDP()
-	{}
+	NetWorkProcess_UDP();
+	
 
-	NetWorkProcess_UDP(GameProcess *pGame);
+	//NetWorkProcess_UDP(GameProcess *pGame);
 
 
 	~NetWorkProcess_UDP()
@@ -22,7 +21,7 @@ public:
 	WORD CheckUserNum(char* ipAddr,int iPort);
 	BOOL SendPacket(WORD com,TCHAR* Buffer);
 	void ReceivePacket();
-	void UDPRecive(WORD UserNum,TCHAR* buffer,WORD wSize);
+	UNPACK_DATA UDPRecive(WORD UserNum,TCHAR* buffer,WORD wSize);
 	void IniSocketObj();
 	void HeartBeatTimerReset();
 	XY strToXY(TCHAR* sPacket);
@@ -39,7 +38,8 @@ public:
 	
 	
 	
-	GameProcess* pGameProc;
+	
+
 	PacketSet pPacket;
 
 	bool sending = false;
@@ -50,8 +50,9 @@ public:
 
 	HANDLE hTimer;
 	HANDLE hHeartBeat;
-	LARGE_INTEGER liDueTime = -300000000;
+	LARGE_INTEGER liDueTime;
 
+	queue<UNPACK_DATA> qUnpackData;
 	vector<PSOCKET_OBJ> vSocketData;
 };
 

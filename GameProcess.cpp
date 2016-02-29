@@ -24,6 +24,18 @@ void GameProcess::setTextColor(COLORREF color)
 	SetConsoleTextAttribute(hConsoleOutput, 1);
 }
 
+GameProcess::GameProcess()
+{
+	m_pNetProc = new NetWorkProcess_UDP();
+
+	hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+
+	_tprintf(_T("자신의 닉네임을 입력하세요 :"));
+	_tscanf(_T("%s"), player);
+	menu();
+
+}
+
 void GameProcess::initGame()
 {
 	int i = 0, k = 0;
@@ -184,11 +196,31 @@ void GameProcess::RivalStoneInput(int y ,int x)
 	turn = MY_TURN;
 }
 
-void GameProcess::setNetworkProc(NetWorkProcess_UDP* pNetProc)
-{
-	m_pNetProc = pNetProc;
-}
 
+void GameProcess::menu()
+{
+	printf("> 2인용 오목 게임 \n");
+	printf("> Key - 방향키, 스페이스\n");
+	printf("	  - 종료(ESC)\n\n");
+	printf("게임을 시작하려면 아무키나 누르세요");
+	getch();
+	system("cls");
+
+	m_pNetProc->SendPacket(USER_IN, player);
+
+	_tprintf(_T("대전 상대를 기다립니다....\n"));
+	m_pNetProc->ReceivePacket();
+	WaitForSingleObject(hEvent, INFINITE);
+
+	_tprintf(_T("매칭 완료!! 5초 후 게임을 시작합니다!\n"));
+
+	int GMap[MAP_Y][MAP_X] = { 0, };
+	initGame();
+
+	Sleep(5000);
+
+	startGame();
+}
 void GameProcess::WaitingRival()
 {
 

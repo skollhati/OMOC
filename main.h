@@ -15,7 +15,7 @@
 #include<iostream>
 #include<vector>
 #include<conio.h>
-
+#include <queue>
 #define USER_IN 1				//서버 접속에 사용
 #define USER_OUT 4				//서버 로그아웃에 사용
 #define MATCHING_GAME 7			//대전 상대와 게임을 한다는 것을 알림
@@ -45,8 +45,15 @@ typedef struct MATCHING
 	bool fPlay;
 	TCHAR rivalName[50];
 };
-#include"GameProcess.h"
-#include "NetworkProcess_UDP.h"
+
+typedef struct UNPACK_DATA
+{
+	WORD com;
+	TCHAR *buf;
+};
+#include "PacketSet.h"
+
+
 
 
 
