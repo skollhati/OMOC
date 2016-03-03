@@ -2,6 +2,7 @@
 #define __PACKETSET_H__
 
 #include"main.h"
+#include "PacketSet.h"
 
 
 #define MESSAGE_REN 100

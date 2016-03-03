@@ -3,6 +3,7 @@
 
 #include "main.h"
 #include "GameProcess.h"
+#include "PacketSet.h"
 
 static CRITICAL_SECTION m_cs;
 
@@ -22,7 +23,9 @@ public:
 	WORD CheckUserNum(char* ipAddr,int iPort);
 	 BOOL SendPacket(WORD com,TCHAR* Buffer);
 	void ReceivePacket();
-	UNPACK_DATA UDPRecive(WORD UserNum,TCHAR* buffer,WORD wSize);
+	void UDPRecive(WORD UserNum,TCHAR* buffer,WORD wSize);
+
+	void RematchProcess(TCHAR* buf);
 	void IniSocketObj();
 	void HeartBeatTimerReset();
 	XY strToXY(TCHAR* sPacket);
@@ -39,7 +42,7 @@ public:
 	SOCKADDR_IN ToServer;
 	SOCKADDR_IN FromServer;
 	
-	static PacketSet pPacket;
+	PacketSet pPacket;
 
 	bool sending = false;
 	DWORD wUserCount;
@@ -47,6 +50,7 @@ public:
 	DWORD Recv_Size;
 	DWORD Send_Size;
 
+	HANDLE hReceive;
 	HANDLE hSend;
 	HANDLE hTimer;
 	HANDLE hHeartBeat;

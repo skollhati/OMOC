@@ -1,24 +1,36 @@
-﻿  main.cpp
-c:\users\kimchanyong\documents\omoc\main.h(47): warning C4091: 'typedef ': 변수를 선언하지 않으면 'MATCHING' 왼쪽은 무시됩니다.
-c:\users\kimchanyong\documents\omoc\main.h(53): warning C4091: 'typedef ': 변수를 선언하지 않으면 'UNPACK_DATA' 왼쪽은 무시됩니다.
-  NetworkProcess_UDP.cpp
-c:\users\kimchanyong\documents\omoc\main.h(47): warning C4091: 'typedef ': 변수를 선언하지 않으면 'MATCHING' 왼쪽은 무시됩니다.
-c:\users\kimchanyong\documents\omoc\main.h(53): warning C4091: 'typedef ': 변수를 선언하지 않으면 'UNPACK_DATA' 왼쪽은 무시됩니다.
-NetworkProcess_UDP.cpp(28): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
-  C:\Program Files (x86)\Windows Kits\8.1\Include\um\WinSock2.h(1850): note: 'inet_addr' 선언을 참조하십시오.
-NetworkProcess_UDP.cpp(80): warning C4244: '인수': 'DWORD'에서 'WORD'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-NetworkProcess_UDP.cpp(73): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
-  C:\Program Files (x86)\Windows Kits\8.1\Include\um\WinSock2.h(1868): note: 'inet_ntoa' 선언을 참조하십시오.
-NetworkProcess_UDP.cpp(83): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
-  C:\Program Files (x86)\Windows Kits\8.1\Include\um\WinSock2.h(1868): note: 'inet_ntoa' 선언을 참조하십시오.
-NetworkProcess_UDP.cpp(95): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+﻿  GameProcess.cpp
+c:\users\kimchanyong\documents\omoc\main.h(53): warning C4091: 'typedef ': 변수를 선언하지 않으면 'MATCHING' 왼쪽은 무시됩니다.
+c:\users\kimchanyong\documents\omoc\main.h(59): warning C4091: 'typedef ': 변수를 선언하지 않으면 'UNPACK_DATA' 왼쪽은 무시됩니다.
+GameProcess.cpp(5): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+GameProcess.cpp(34): warning C4996: 'wscanf': This function or variable may be unsafe. Consider using wscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\corecrt_wstdio.h(928): note: 'wscanf' 선언을 참조하십시오.
+GameProcess.cpp(129): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
+GameProcess.cpp(201): warning C4996: 'wcscpy': This function or variable may be unsafe. Consider using wcscpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\corecrt_wstring.h(121): note: 'wcscpy' 선언을 참조하십시오.
+GameProcess.cpp(213): warning C4996: 'kbhit': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _kbhit. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\conio.h(458): note: 'kbhit' 선언을 참조하십시오.
+GameProcess.cpp(215): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
+GameProcess.cpp(274): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
+GameProcess.cpp(308): warning C4996: 'wcscpy': This function or variable may be unsafe. Consider using wcscpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\corecrt_wstring.h(121): note: 'wcscpy' 선언을 참조하십시오.
+GameProcess.cpp(312): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\string.h(119): note: 'strcpy' 선언을 참조하십시오.
-NetworkProcess_UDP.cpp(142): error C2597: 비정적 멤버 'NetWorkProcess_UDP::ClientSocket'에 대한 참조가 잘못되었습니다.
-NetworkProcess_UDP.cpp(142): error C2597: 비정적 멤버 'NetWorkProcess_UDP::ToServer'에 대한 참조가 잘못되었습니다.
-NetworkProcess_UDP.cpp(142): error C2440: '형식 캐스팅': 'SOCKADDR_IN NetWorkProcess_UDP::* '에서 'sockaddr *'(으)로 변환할 수 없습니다.
-  NetworkProcess_UDP.cpp(142): note: 이 변환이 가능한 컨텍스트가 없습니다.
-NetworkProcess_UDP.cpp(144): error C2597: 비정적 멤버 'NetWorkProcess_UDP::Send_Size'에 대한 참조가 잘못되었습니다.
-NetworkProcess_UDP.cpp(144): error C3867: 'NetWorkProcess_UDP::Send_Size': 비표준 구문입니다. '&'를 사용하여 멤버 포인터를 만드세요.
-NetworkProcess_UDP.cpp(146): error C2352: 'NetWorkProcess_UDP::HeartBeatTimerReset': 비정적 멤버 함수를 잘못 호출했습니다.
-  c:\users\kimchanyong\documents\omoc\NetworkProcess_UDP.h(27): note: 'NetWorkProcess_UDP::HeartBeatTimerReset' 선언을 참조하십시오.
-NetworkProcess_UDP.cpp(161): error C2597: 비정적 멤버 'NetWorkProcess_UDP::hSend'에 대한 참조가 잘못되었습니다.
+GameProcess.cpp(313): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\string.h(119): note: 'strcpy' 선언을 참조하십시오.
+GameProcess.cpp(318): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\string.h(119): note: 'strcpy' 선언을 참조하십시오.
+GameProcess.cpp(319): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\string.h(119): note: 'strcpy' 선언을 참조하십시오.
+  main.cpp
+c:\users\kimchanyong\documents\omoc\main.h(53): warning C4091: 'typedef ': 변수를 선언하지 않으면 'MATCHING' 왼쪽은 무시됩니다.
+c:\users\kimchanyong\documents\omoc\main.h(59): warning C4091: 'typedef ': 변수를 선언하지 않으면 'UNPACK_DATA' 왼쪽은 무시됩니다.
+  코드를 생성하고 있습니다.
+c:\users\kimchanyong\documents\omoc\gameprocess.cpp(200): warning C4700: 초기화되지 않은 'unpack_data' 지역 변수를 사용했습니다.
+  56 of 252 functions (22.2%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    6 functions had inline decision re-evaluated but remain unchanged
+  코드를 생성했습니다.
+  OMOC.vcxproj -> C:\Users\KimChanYong\Documents\OMOC\x64\Release\OMOC.exe

@@ -40,9 +40,11 @@ public:
 	{}
 
 public:
+	void RetireWin();
 	void gotoxy(int x, int y);
 	void setTextColor(COLORREF color);
 	void initGame();
+	static UINT WINAPI WaittingTimer(LPVOID lpParam);
 	void checkStone(xy hd, int turn);
 	void startGame();
 	void setGame(MATCHING match);
@@ -50,6 +52,7 @@ public:
 	void WaitingRival();
 	int searchStone(xy hd, int, int, int);
 	void menu();
+	void RematchMenu();
 	void SendEvent(WORD com, TCHAR* buf);
 public:
 

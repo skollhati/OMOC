@@ -37,8 +37,12 @@ NetWorkProcess_UDP::NetWorkProcess_UDP()
 		WSACleanup();
 		exit(0);
 	}
-
+	
+	hSend = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::SendThread, (LPVOID)this, 0, NULL);
+	hReceive = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::ReceiveThread, (LPVOID)this, 0, NULL);
 	hHeartBeat = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::CheckHeartBeat, (LPVOID)this, 0,NULL);
+	
+	
 	IniSocketObj();
 }
 
@@ -150,6 +154,17 @@ BOOL NetWorkProcess_UDP::SendPacket(WORD com,TCHAR* Buffer)
 	return false;
 }
 
+UINT WINAPI NetWorkProcess_UDP::ReceiveThread(LPVOID lpParam)
+{
+	NetWorkProcess_UDP* m_NetProc = (NetWorkProcess_UDP *)lpParam;
+
+	while (1)
+	{
+		m_NetProc->ReceivePacket();
+	}
+	return 0;
+}
+
 UINT WINAPI NetWorkProcess_UDP::SendThread(LPVOID lpParam)
 {
 	
@@ -168,10 +183,10 @@ UINT WINAPI NetWorkProcess_UDP::SendThread(LPVOID lpParam)
 
 }
 
-UNPACK_DATA NetWorkProcess_UDP::UDPRecive(WORD UserNum, TCHAR* buffer, WORD wSize)
+void NetWorkProcess_UDP::UDPRecive(WORD UserNum, TCHAR* buffer, WORD wSize)
 {
 	pPacket.GetInit(buffer);
-	UNPACK_DATA m_Unpack;
+
 
 	//사이즈에 맞게 온 함수일 경우 차례대로 진행 아닐 경우 무시
 	if (pPacket.GetSize() == wSize)
@@ -193,17 +208,34 @@ UNPACK_DATA NetWorkProcess_UDP::UDPRecive(WORD UserNum, TCHAR* buffer, WORD wSiz
 			pGameProc->RivalStoneInput(temp_xy.y, temp_xy.x);
 			break;
 
-		case GAME_INFO:
-			//승패
-			//게임 결과 유저정보 갱신 (상대편 정보도 표시)
+		case GAME_REMATCH:
+				
 			break;
+
+		case GAME_RETIRE: pGameProc->RetireWin();
+			break;
+
 		}
 
 	}
-	else
-		m_Unpack = { 0, };
 
-	return m_Unpack;
+}
+void NetWorkProcess_UDP::RematchProcess(TCHAR* buf)
+{
+	if (_tcscmp(buf, _T("1")))
+	{
+		pGameProc->startGame();
+	}
+	else if (_tcscmp(buf, _T("2")))
+	{
+		//대기 프로세스 
+		pGameProc->WaitingRival();
+	}
+	else if (_tcscmp(buf, _T("0")))
+	{
+		//상대방 거부 메뉴로 돌아가자
+		pGameProc->menu();
+	}
 }
 
 XY NetWorkProcess_UDP::strToXY(TCHAR* sPacket)
@@ -217,14 +249,15 @@ XY NetWorkProcess_UDP::strToXY(TCHAR* sPacket)
 void NetWorkProcess_UDP::HeartBeatTimerReset()
 {
 	CancelWaitableTimer(hTimer);
-	SetWaitableTimer(hTimer, &liDueTime, 30000, NULL, NULL, FALSE);
+	SetWaitableTimer(hTimer, &liDueTime, 10000, NULL, NULL, FALSE);
 }
 
 UINT WINAPI NetWorkProcess_UDP::CheckHeartBeat(LPVOID lpParam)
 {
 	
 	NetWorkProcess_UDP* m_NetProc = (NetWorkProcess_UDP *)lpParam;
-	SetWaitableTimer(m_NetProc->hTimer, &(m_NetProc->liDueTime), 30000, NULL, NULL, FALSE);
+	m_NetProc->liDueTime.QuadPart = -100000000;
+	SetWaitableTimer(m_NetProc->hTimer, &(m_NetProc->liDueTime), 10000, NULL, NULL, FALSE);
 	
 	while (1)
 	{
