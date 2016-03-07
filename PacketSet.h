@@ -38,7 +38,7 @@ public:
 	void    Putint(int      iint);
 	void	PutStr(TCHAR* sStr);
 	void	PutSize();
-	
+	TCHAR*	PrintBuffer();
 	void    GetInit(TCHAR*    ib_Buffer);
 	BYTE	GetBYTE(void);
 	WORD	GetWORD(void);

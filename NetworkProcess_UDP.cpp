@@ -3,17 +3,14 @@
 #include <iostream>
 using namespace std;
 
-NetWorkProcess_UDP::NetWorkProcess_UDP()
+
+void NetWorkProcess_UDP::InitNetwork()
 {
-	
 	InitializeCriticalSection(&m_cs);
 	short port_num = 8800;
 	wUserCount = 0;
-	hSend = CreateEvent(NULL, FALSE, FALSE, NULL);
+	hSend = CreateEvent(NULL, TRUE, FALSE, NULL);
 	hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
-
-
-	pGameProc = new GameProcess(&hSend);
 
 	if (WSAStartup(0x202, &wsaData) == SOCKET_ERROR)
 	{
@@ -37,15 +34,14 @@ NetWorkProcess_UDP::NetWorkProcess_UDP()
 		WSACleanup();
 		exit(0);
 	}
+	IniSocketObj();
 	
-	hSend = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::SendThread, (LPVOID)this, 0, NULL);
+	///hSend = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::SendThread, (LPVOID)this, 0, NULL);
 	hReceive = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::ReceiveThread, (LPVOID)this, 0, NULL);
 	hHeartBeat = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::CheckHeartBeat, (LPVOID)this, 0,NULL);
-	
-	
-	IniSocketObj();
+	cout << "hsend, hreceive,hheart beat start" << endl;
+	SendPacket(USER_IN, _T("test"));
 }
-
 //유저소켓정보 객체 초기화
 void NetWorkProcess_UDP::IniSocketObj()
 {
@@ -74,14 +70,14 @@ void NetWorkProcess_UDP::ReceivePacket()
 			continue;
 		}
 
-		wUserNum = CheckUserNum(inet_ntoa(FromServer.sin_addr), FromServer.sin_port);
+		//wUserNum = CheckUserNum(inet_ntoa(FromServer.sin_addr), FromServer.sin_port);
 
-		if (wUserNum == -1)
-		{
-			//접속 허용 용량 벗어남 알림
-		}
+		//if (wUserNum == -1)
+		//{
+		//	//접속 허용 용량 벗어남 알림
+		//}
 
-		UDPRecive(wUserNum, buffer, Recv_Size);
+		UDPRecive(buffer, Recv_Size);
 	}
 
 	cout << "Recv From " << inet_ntoa(FromServer.sin_addr) << endl;
@@ -135,15 +131,15 @@ PSOCKET_OBJ NetWorkProcess_UDP::InUserVector(char* ipAddr)
 	return pEmptyObj;
 }
 
-BOOL NetWorkProcess_UDP::SendPacket(WORD com,TCHAR* Buffer)
+BOOL NetWorkProcess_UDP::SendPacket(WORD com, TCHAR* Buffer)
 {
 	pPacket.Init();
 	pPacket.PutWORD(com);
 	pPacket.PutStr(Buffer);
 	pPacket.PutSize();
 
-
-	Send_Size = sendto(ClientSocket, (const char*)Buffer, BUFFER_SIZE, 0, (struct sockaddr*)&ToServer, sizeof(ToServer));
+	cout << "보낸 데이터 :" << Buffer << endl;
+	Send_Size = sendto(ClientSocket, (const char*)pPacket.PrintBuffer(), BUFFER_SIZE, 0, (struct sockaddr*)&ToServer, sizeof(ToServer));
 
 	if (Send_Size == pPacket.m_iLen)
 	{
@@ -165,78 +161,30 @@ UINT WINAPI NetWorkProcess_UDP::ReceiveThread(LPVOID lpParam)
 	return 0;
 }
 
-UINT WINAPI NetWorkProcess_UDP::SendThread(LPVOID lpParam)
-{
-	
-	NetWorkProcess_UDP* m_NetProc = (NetWorkProcess_UDP *)lpParam;
-
-	
-	while (1)
-	{
-		WaitForSingleObject(m_NetProc->hSend, INFINITE);
-		//try-catch
-		EnterCriticalSection(&m_cs);
-		UNPACK_DATA *unpack = m_NetProc->pGameProc->q_SendData.front();
-		m_NetProc->SendPacket(unpack->com, unpack->buf);
-		LeaveCriticalSection(&m_cs);
-	}
-
-}
-
-void NetWorkProcess_UDP::UDPRecive(WORD UserNum, TCHAR* buffer, WORD wSize)
-{
-	pPacket.GetInit(buffer);
-
-
-	//사이즈에 맞게 온 함수일 경우 차례대로 진행 아닐 경우 무시
-	if (pPacket.GetSize() == wSize)
-	{
-		
-
-
-		switch (pPacket.GetWORD())
-		{
-		case MATCHING_GAME:
-			//선공 후공(0,1) + 상대 아이디
-			MATCHING match_game = *(MATCHING *)pPacket.GetStr();
-			pGameProc->setGame(match_game);
-			SetEvent(pGameProc->hEvent);
-			break;
-
-		case GAME_COMMAND:
-			XY temp_xy = strToXY(pPacket.GetStr());
-			pGameProc->RivalStoneInput(temp_xy.y, temp_xy.x);
-			break;
-
-		case GAME_REMATCH:
-				
-			break;
-
-		case GAME_RETIRE: pGameProc->RetireWin();
-			break;
-
-		}
-
-	}
-
-}
-void NetWorkProcess_UDP::RematchProcess(TCHAR* buf)
-{
-	if (_tcscmp(buf, _T("1")))
-	{
-		pGameProc->startGame();
-	}
-	else if (_tcscmp(buf, _T("2")))
-	{
-		//대기 프로세스 
-		pGameProc->WaitingRival();
-	}
-	else if (_tcscmp(buf, _T("0")))
-	{
-		//상대방 거부 메뉴로 돌아가자
-		pGameProc->menu();
-	}
-}
+//UINT WINAPI NetWorkProcess_UDP::SendThread(LPVOID lpParam)
+//{
+//
+//	NetWorkProcess_UDP* m_NetProc = (NetWorkProcess_UDP *)lpParam;
+//
+//	Sleep(1000);
+//	while (1)
+//	{
+//		//	WaitForSingleObject(m_NetProc->hSend, INFINITE);
+//			//try-catch
+//		if (m_NetProc->pGameProc != NULL)
+//		{
+//			if (m_NetProc->pGameProc->q_SendData.size() > 0)
+//			{
+//				EnterCriticalSection(&m_cs);
+//				UNPACK_DATA *unpack = m_NetProc->pGameProc->q_SendData.front();
+//				m_NetProc->SendPacket(unpack->com, unpack->buf);
+//				LeaveCriticalSection(&m_cs);
+//			}
+//		}
+//		//	ResetEvent(m_NetProc->hSend);
+//	}
+//
+//}
 
 XY NetWorkProcess_UDP::strToXY(TCHAR* sPacket)
 {
@@ -254,15 +202,15 @@ void NetWorkProcess_UDP::HeartBeatTimerReset()
 
 UINT WINAPI NetWorkProcess_UDP::CheckHeartBeat(LPVOID lpParam)
 {
-	
+
 	NetWorkProcess_UDP* m_NetProc = (NetWorkProcess_UDP *)lpParam;
 	m_NetProc->liDueTime.QuadPart = -100000000;
 	SetWaitableTimer(m_NetProc->hTimer, &(m_NetProc->liDueTime), 10000, NULL, NULL, FALSE);
-	
+
 	while (1)
 	{
-		WaitForSingleObject(m_NetProc->hTimer,INFINITE);
-		m_NetProc->SendPacket(HEARTBEAT, NULL);
+		WaitForSingleObject(m_NetProc->hTimer, INFINITE);
+		m_NetProc->SendPacket(HEARTBEAT, _T(""));
 	}
 
 

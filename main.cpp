@@ -1,6 +1,6 @@
 #include "main.h"
 //坷格 家胶
-#include "NetworkProcess_UDP.h"
+#include"GameProcess.h"
 
 
 //PacketSet	sPacketSet;
@@ -24,8 +24,14 @@ int _tmain(int argc, char* argv[])
 	//int i;
 	//---------------------------坷格 家胶------------------------
 
-	NetWorkProcess_UDP *pNetwork = new NetWorkProcess_UDP();
+	//NetWorkProcess_UDP *pNetwork = new NetWorkProcess_UDP();
 
+	GameProcess GameProc = GameProcess();
+
+	while (1)
+	{
+
+	}
 	
 	
 	return 0;

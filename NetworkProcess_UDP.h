@@ -2,15 +2,17 @@
 #define __NETWORK_UDP_H__
 
 #include "main.h"
-#include "GameProcess.h"
+//#include "GameProcess.h"
 #include "PacketSet.h"
 
+//UDP 500 πŸ¿Ã∆Æ
 static CRITICAL_SECTION m_cs;
 
 class NetWorkProcess_UDP
 {
 public:
-	NetWorkProcess_UDP();
+	NetWorkProcess_UDP()
+	{}
 	
 
 	//NetWorkProcess_UDP(GameProcess *pGame);
@@ -21,11 +23,12 @@ public:
 
 public:
 	WORD CheckUserNum(char* ipAddr,int iPort);
-	 BOOL SendPacket(WORD com,TCHAR* Buffer);
+	BOOL SendPacket(WORD com,TCHAR* Buffer);
+	void InitNetwork();
 	void ReceivePacket();
-	void UDPRecive(WORD UserNum,TCHAR* buffer,WORD wSize);
+	virtual void UDPRecive(TCHAR* buffer,WORD wSize) = 0;
 
-	void RematchProcess(TCHAR* buf);
+	
 	void IniSocketObj();
 	void HeartBeatTimerReset();
 	XY strToXY(TCHAR* sPacket);
@@ -36,7 +39,6 @@ public:
 	static UINT WINAPI ReceiveThread(LPVOID lpParam);
 
 public:
-	GameProcess* pGameProc;
 	WSADATA wsaData;
 	SOCKET ClientSocket;
 	SOCKADDR_IN ToServer;

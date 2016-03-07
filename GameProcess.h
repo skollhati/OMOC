@@ -8,7 +8,7 @@
 //5.비정상 종료 대비
 
 #include "main.h"
-
+#include "NetworkProcess_UDP.h"
 
 
 #define LEFT 75
@@ -28,10 +28,11 @@ using namespace std;
 
 
 
-class GameProcess {
+class GameProcess :NetWorkProcess_UDP{
 
 public:
-	GameProcess(HANDLE* p_hSend);
+	//GameProcess(BOOL(*pSend)(WORD, TCHAR*));
+	GameProcess();
 	
 
 	//GameProcess(NetWorkProcess_UDP* pNetProc);
@@ -40,6 +41,9 @@ public:
 	{}
 
 public:
+	//void SetSendProc(BOOL(*pSend)(WORD, TCHAR*));
+
+	
 	void RetireWin();
 	void gotoxy(int x, int y);
 	void setTextColor(COLORREF color);
@@ -54,6 +58,8 @@ public:
 	void menu();
 	void RematchMenu();
 	void SendEvent(WORD com, TCHAR* buf);
+	void RematchProcess(TCHAR* buf);
+	void UDPRecive(TCHAR* buffer, WORD wSize);
 public:
 
 	HANDLE *hSend;

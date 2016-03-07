@@ -24,18 +24,27 @@ void GameProcess::setTextColor(COLORREF color)
 	SetConsoleTextAttribute(hConsoleOutput, 1);
 }
 
-GameProcess::GameProcess(HANDLE* p_hSend)
-{
-	hSend = p_hSend;
 
+GameProcess::GameProcess()
+{
 	hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+
+	InitNetwork();
+	//hSend = p_hSend;
 
 	_tprintf(_T("자신의 닉네임을 입력하세요 :"));
 	_tscanf(_T("%s"), player);
 	menu();
 
-}
+	
 
+}
+//void GameProcess::SetSendProc(char)
+//{
+//	
+//	///pSendFunc = pSend;
+//
+//}
 void GameProcess::initGame()
 {
 	int GMap[MAP_Y][MAP_X] = { 0, };
@@ -125,7 +134,7 @@ void GameProcess::checkStone(xy hd,  int turn)
 				//vInfo->setVersusUpdate(false);
 			}
 			printf("님이 승리하셨습니다.\n");
-
+			ResetEvent(hEvent);
 			getch();
 			
 			//searchstone 함수 연산을 서버에서 처리하는 방식으로 바꿀 것
@@ -152,7 +161,8 @@ void GameProcess::RematchMenu()
 		SuspendThread(hWTimer);
 		GetExitCodeThread(hWTimer, NULL);
 		initGame();
-		SendEvent(GAME_REMATCH, _T("1"));
+		SendPacket(GAME_REMATCH, _T("1"));
+		//SendEvent(GAME_REMATCH, _T("1"));
 		CloseHandle(hWTimer);
 		cout << "재경기를 선택하셨습니다. 상대방을 기다립니다." << endl;
 	}
@@ -161,7 +171,8 @@ void GameProcess::RematchMenu()
 		SuspendThread(hWTimer);
 		GetExitCodeThread(hWTimer, NULL);
 		cout << "경기 포기를 선택하셨습니다. 메뉴로 이동합니다." << endl;
-		SendEvent(GAME_REMATCH, _T("0"));
+		//SendEvent(GAME_REMATCH, _T("0"));
+		SendPacket(GAME_REMATCH, _T("0"));
 		CloseHandle(hWTimer);
 		menu();
 		
@@ -187,7 +198,7 @@ UINT WINAPI GameProcess::WaittingTimer(LPVOID lpParam)
 		Sleep(1000);
 		if (i == 10)
 		{
-			pGP->SendEvent(GAME_REMATCH, _T("0"));
+			pGP->SendPacket(GAME_REMATCH, _T("0"));
 		}
 	}
 	
@@ -211,6 +222,13 @@ void GameProcess::SendEvent(WORD com, TCHAR* buf)
 
 void GameProcess::startGame()
 {
+	WaitForSingleObject(hEvent, INFINITE);
+	_tprintf(_T("매칭 완료!! 5초 후 게임을 시작합니다!\n"));
+
+	system("cls");
+	initGame();
+	Sleep(5000);
+
 	char ip = '\0';
 
 
@@ -247,13 +265,13 @@ void GameProcess::startGame()
 						GMap[hd.y][hd.x] = MY_TURN;
 						printf("%s",my_stone);
 						checkStone(hd, turn);
-						SendEvent(GAME_COMMAND, (TCHAR*)&hd);
+						SendPacket(GAME_COMMAND, (TCHAR*)&hd);
 						turn = RIVAL_TURN;
 					}
 				}
 				break;
 			case ESC:
-				SendEvent(USER_OUT, NULL);
+				SendPacket(USER_OUT, NULL);
 				exit(1);
 				break;
 			}
@@ -279,20 +297,9 @@ void GameProcess::menu()
 	printf("게임을 시작하려면 아무키나 누르세요");
 
 	getch();
-	system("cls");
-	SendEvent(USER_IN, player);
-	//m_pNetProc->SendPacket(USER_IN, player);
+	SendPacket(USER_IN, player);
 
 	_tprintf(_T("대전 상대를 기다립니다....\n"));
-	WaitForSingleObject(hEvent, INFINITE);
-
-	_tprintf(_T("매칭 완료!! 5초 후 게임을 시작합니다!\n"));
-
-	
-	initGame();
-
-	Sleep(5000);
-
 	startGame();
 }
 
@@ -325,5 +332,59 @@ void GameProcess::setGame(MATCHING match)
 		strcpy(my_stone, "○");
 		strcpy(rival_stone, "●");
 		turn = RIVAL_TURN;
+	}
+}
+
+void GameProcess::UDPRecive(TCHAR* buffer, WORD wSize)
+{
+	pPacket.GetInit(buffer);
+
+
+	//사이즈에 맞게 온 함수일 경우 차례대로 진행 아닐 경우 무시
+	if (pPacket.GetSize() == wSize)
+	{
+
+		switch (pPacket.GetWORD())
+		{
+		case MATCHING_GAME:
+			//선공 후공(0,1) + 상대 아이디
+			MATCHING match_game = *(MATCHING *)pPacket.GetStr();
+			setGame(match_game);
+			SetEvent(hEvent);
+			break;
+
+		case GAME_COMMAND:
+			XY temp_xy = strToXY(pPacket.GetStr());
+			RivalStoneInput(temp_xy.y, temp_xy.x);
+			break;
+
+		case GAME_REMATCH:
+
+			break;
+
+		case GAME_RETIRE: RetireWin();
+			break;
+
+		}
+
+	}
+
+}
+
+void GameProcess::RematchProcess(TCHAR* buf)
+{
+	if (_tcscmp(buf, _T("1")))
+	{
+		startGame();
+	}
+	else if (_tcscmp(buf, _T("2")))
+	{
+		//대기 프로세스 
+		WaitingRival();
+	}
+	else if (_tcscmp(buf, _T("0")))
+	{
+		//상대방 거부 메뉴로 돌아가자
+		menu();
 	}
 }

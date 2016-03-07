@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="GameProcess.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="NetworkProcess_UDP.h" />
     <ClInclude Include="PacketSet.h" />
   </ItemGroup>

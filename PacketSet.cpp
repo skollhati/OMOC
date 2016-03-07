@@ -32,7 +32,7 @@ void PacketSet::Putint(int iint)
 
 void PacketSet::PutStr(TCHAR* sStr)
 {
-	_tcscpy(&m_szBuffr[m_iLen], sStr);
+	_tcscpy(&m_szBuffr[m_iLen],sStr);
 
 	m_iLen += _tcslen(sStr);
 	*(WORD*)(&m_szBuffr[m_iLen]) = 0;
@@ -82,8 +82,13 @@ TCHAR* PacketSet::GetStr()
 {
 	TCHAR* sStr = &m_rzBuffr[m_iLen];
 	m_iLen += _tcslen(sStr) + 2;
-
+	_tprintf(_T("%s\n"), sStr);
 	return sStr;
+}
+
+TCHAR* PacketSet::PrintBuffer()
+{
+	return m_szBuffr;
 }
 
 //TCHAR* PacketSet::PackedPacket(TCHAR message[], WORD command)
