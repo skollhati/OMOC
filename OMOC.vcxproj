@@ -147,14 +147,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameProcess.cpp" />
+    <ClCompile Include="GameRoom.cpp" />
     <ClCompile Include="main.cpp">
       <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</SDLCheck>
     </ClCompile>
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="NetworkProcess_UDP.cpp" />
     <ClCompile Include="PacketSet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameProcess.h" />
+    <ClInclude Include="GameRoom.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="NetworkProcess_UDP.h" />

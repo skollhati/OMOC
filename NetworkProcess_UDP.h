@@ -18,17 +18,18 @@ public:
 	//NetWorkProcess_UDP(GameProcess *pGame);
 
 
-	~NetWorkProcess_UDP()
-	{}
+	virtual ~NetWorkProcess_UDP() = 0;
+	
 
 public:
 	WORD CheckUserNum(char* ipAddr,int iPort);
 	BOOL SendPacket(WORD com,TCHAR* Buffer);
-	void InitNetwork();
+	void InitNetwork(short port,char* ip_addr);
+	void InitNetwork(short port, char* ip_addr,SOCKET client_sock);
+
 	void ReceivePacket();
 	virtual void UDPRecive(TCHAR* buffer,WORD wSize) = 0;
-
-	
+	void DisConnect();
 	void IniSocketObj();
 	void HeartBeatTimerReset();
 	XY strToXY(TCHAR* sPacket);

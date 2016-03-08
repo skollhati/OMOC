@@ -4,10 +4,9 @@
 using namespace std;
 
 
-void NetWorkProcess_UDP::InitNetwork()
+void NetWorkProcess_UDP::InitNetwork(short port_num,char* ip_addr)
 {
 	InitializeCriticalSection(&m_cs);
-	short port_num = 8800;
 	wUserCount = 0;
 	hSend = CreateEvent(NULL, TRUE, FALSE, NULL);
 	hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
@@ -22,7 +21,7 @@ void NetWorkProcess_UDP::InitNetwork()
 	memset(&FromServer, 0, sizeof(FromServer));
 
 	ToServer.sin_family = AF_INET;
-	ToServer.sin_addr.s_addr = inet_addr("127.0.0.1");
+	ToServer.sin_addr.s_addr = inet_addr(ip_addr);
 	ToServer.sin_port = htons(port_num);
 
 	ClientSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -35,12 +34,52 @@ void NetWorkProcess_UDP::InitNetwork()
 		exit(0);
 	}
 	IniSocketObj();
-	
-	///hSend = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::SendThread, (LPVOID)this, 0, NULL);
+
 	hReceive = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::ReceiveThread, (LPVOID)this, 0, NULL);
 	hHeartBeat = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::CheckHeartBeat, (LPVOID)this, 0,NULL);
 	cout << "hsend, hreceive,hheart beat start" << endl;
-	SendPacket(USER_IN, _T("test"));
+	
+}
+
+void NetWorkProcess_UDP::InitNetwork(short port_num, char* ip_addr,SOCKET client_sock)
+{
+	InitializeCriticalSection(&m_cs);
+	wUserCount = 0;
+	hSend = CreateEvent(NULL, TRUE, FALSE, NULL);
+	hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
+
+	if (WSAStartup(0x202, &wsaData) == SOCKET_ERROR)
+	{
+		cout << "WinSock initialize fault" << endl;
+		WSACleanup();
+	}
+
+	memset(&ToServer, 0, sizeof(ToServer));
+	memset(&FromServer, 0, sizeof(FromServer));
+
+	ToServer.sin_family = AF_INET;
+	ToServer.sin_addr.s_addr = inet_addr(ip_addr);
+	ToServer.sin_port = htons(port_num);
+
+	memcpy(&ClientSocket, &client_sock,sizeof(client_sock));
+
+	if (ClientSocket == INVALID_SOCKET)
+	{
+		cout << "socket creation fault" << endl;
+		closesocket(ClientSocket);
+		WSACleanup();
+		exit(0);
+	}
+	IniSocketObj();
+
+	hReceive = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::ReceiveThread, (LPVOID)this, 0, NULL);
+	cout << "hsend, hreceive,hheart beat start" << endl;
+
+}
+
+void NetWorkProcess_UDP::DisConnect()
+{
+	closesocket(ClientSocket);
 }
 //유저소켓정보 객체 초기화
 void NetWorkProcess_UDP::IniSocketObj()
@@ -77,7 +116,7 @@ void NetWorkProcess_UDP::ReceivePacket()
 		//	//접속 허용 용량 벗어남 알림
 		//}
 
-		UDPRecive(buffer, Recv_Size);
+		this->UDPRecive(buffer, Recv_Size);
 	}
 
 	cout << "Recv From " << inet_ntoa(FromServer.sin_addr) << endl;

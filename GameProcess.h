@@ -9,18 +9,9 @@
 
 #include "main.h"
 #include "NetworkProcess_UDP.h"
+#include "Menu.h"
+#include "GameRoom.h"
 
-
-#define LEFT 75
-#define RIGHT 77
-#define UP 72
-#define DOWN 80
-#define SPACE 32
-#define MAP_X 39
-#define MAP_Y 24
-#define ESC 27
-#define MY_TURN 1
-#define RIVAL_TURN 2
 
 
 
@@ -41,44 +32,28 @@ public:
 	{}
 
 public:
-	//void SetSendProc(BOOL(*pSend)(WORD, TCHAR*));
 
-	
-	void RetireWin();
-	void gotoxy(int x, int y);
 	void setTextColor(COLORREF color);
-	void initGame();
 	static UINT WINAPI WaittingTimer(LPVOID lpParam);
-	void checkStone(xy hd, int turn);
-	void startGame();
-	void setGame(MATCHING match);
-	void RivalStoneInput(int y, int x);
-	void WaitingRival();
-	int searchStone(xy hd, int, int, int);
-	void menu();
-	void RematchMenu();
-	void SendEvent(WORD com, TCHAR* buf);
-	void RematchProcess(TCHAR* buf);
 	void UDPRecive(TCHAR* buffer, WORD wSize);
+	void MenuSelected(int n_menu);
+	void GameSelected(WORD* room_data);
+	void GameRoomProc(WORD* select_num);
+	void MakeGameRoom(TCHAR* title);
+	void JoinWaitGameRoom(TCHAR* title,short port,char* ip_addr);
+
 public:
 
 	HANDLE *hSend;
 	HANDLE hEvent;
-	char my_stone[3];
-	char rival_stone[3];
 	queue<UNPACK_DATA*> q_SendData;
 	
 
 private:
-	
-	int GMap[MAP_Y][MAP_X];
+
+	GameRoom gRoom;
+	Menu g_menu;
 	char cmd[256] = "\0";
-	int turn = 0;
-
-	xy hd;
-	TCHAR player[50];
-	TCHAR rival[50];
-
 };
 
 #endif // !__GAMEPROCESS_H__
