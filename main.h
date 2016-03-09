@@ -18,8 +18,9 @@
 #include<conio.h>
 #include <queue>
 
-#define USER_IN 1				//서버 접속에 사용
-#define USER_OUT 4				//서버 로그아웃에 사용
+#define USER_IN 1	
+#define LOGIN_OK 2				//서버 접속에 사용
+#define USER_OUT 4				
 #define HEARTBEAT 5				//접속 중임을 주기적으로 알림
 
 #define GAME_RETIRE 12
@@ -30,12 +31,14 @@
 #define GAME_REMATCH 101	    //게임 재경기 알림 ( 양쪽 모드 TRUE) 를 전송해야 리매치 성사
 #define GAME_RESULT 102			//게임 결과 알림
 
-
 #define GAME_ROOM_LIST 200
-#define GAME_ROOM_SELECTED 201
-#define GAME_ROOM_REFRESH 202
-#define GAME_ROOM_RIVAL_READY 203
-#define GAME_ROOM_RIVAL_UNREADY 204
+#define GAME_ROOM_LIST_HEAD 211
+#define GAME_ROOM_LIST_BODY 212
+
+#define GAME_ROOM_SELECTED 202
+#define GAME_ROOM_REFRESH 203
+#define GAME_ROOM_RIVAL_READY 204
+#define GAME_ROOM_RIVAL_UNREADY 205
 
 #define GAME_ROOM_START 210
 
@@ -71,12 +74,11 @@ typedef struct SOCKET_DATA
 	bool bOnOff;
 }*PSOCKET_OBJ;
 
-typedef struct MATCHING
+typedef struct GAME_ROOM_DATA
 {
-	bool fPlay;
-	TCHAR rivalName[50];
-};
-
+	WORD roomNum;
+	TCHAR title[50];
+}gRoomData;
 typedef struct UNPACK_DATA
 {
 	WORD com;

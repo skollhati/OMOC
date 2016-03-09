@@ -24,9 +24,13 @@ void GameProcess::setTextColor(COLORREF color)
 GameProcess::GameProcess()
 {
 	hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-	g_menu = Menu();
-	//hSend = p_hSend;
+	
+	for (int i = 0; i < 50; i++)
+	{
+		gRoomList[i] = gRoomData();
+	}
 
+	g_menu = Menu();
 	g_menu.InitMenu();
 	MenuSelected(g_menu.ShowMainMenu());
 }
@@ -56,8 +60,8 @@ void GameProcess::MenuSelected(int n_menu)
 	case 3: 
 		InitNetwork(8800,"127.0.0.1"); 
 		SendPacket(USER_IN,g_menu.InputLoginInfo());
-		Sleep(1000);
-		GameRoomProc(g_menu.ShowGameRoom());
+		Sleep(500);
+		
 		Sleep(1000);
 		break;
 	case 4: exit(0);
@@ -97,6 +101,31 @@ void GameProcess::MakeGameRoom(TCHAR* title)
 	SuspendThread(hReceive);
 }
 
+void GameProcess::ShowGameList()
+{
+
+}
+
+void GameProcess::InsertGameList(PacketSet p_Packet)
+{
+	//보조 커맨드
+	if (p_Packet.GetWORD() == GAME_ROOM_LIST_HEAD)
+	{
+		wTotalCount = p_Packet.GetWORD();
+		wReceiveCount = 0;
+	}
+	else if (p_Packet.GetWORD() == GAME_ROOM_LIST_BODY)
+	{
+		WORD wtemp = p_Packet.GetWORD();
+		gRoomList[wReceiveCount] = *(gRoomData *)p_Packet.GetStr();
+		wReceiveCount += wtemp;
+	}
+
+	if (wReceiveCount == wTotalCount)
+		ShowGameList();
+	//카운트
+}
+
 //networkprocess_udp 구조 고치기 리시브파트..자체 함수만 부를듯?
 void GameProcess::UDPRecive(TCHAR* buffer, WORD wSize)
 {
@@ -110,25 +139,35 @@ void GameProcess::UDPRecive(TCHAR* buffer, WORD wSize)
 		switch (pPacket.GetWORD())
 		{
 		case USER_IN:
-			//서버와 라이벌 구분
+			gRoom.JoinRival(pPacket.GetStr());
 			break;
 
 		case USER_OUT:
 			//라이벌이 나가면 현재 상태에 따라 함수 호출
 			//게임 중이냐 대기실이냐
+			if (myPlayState)
+			{
+				//게임중 나가는 것
+			}
+			else
+			{
+				//대기실에서 나가는것
+				gRoom.RivalOutWaitingRoom();
+			}
+
 			break;
 
 		case GAME_COMMAND:
 			XY temp_xy = strToXY(pPacket.GetStr());
 			gRoom.RivalStoneInput(temp_xy.y, temp_xy.x);
-
 			break;
 
 		case GAME_ROOM_LIST:
-			//리스트를 한번에 다받아서 저장
-			//refresh를 통해 새로 갱신
+			InsertGameList(pPacket);
 			break;
-
+		case LOGIN_OK:
+			GameRoomProc(g_menu.ShowGameRoom());
+			break;
 		case GAME_ROOM_START:
 			
 			break;

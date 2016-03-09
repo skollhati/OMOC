@@ -18,7 +18,8 @@ public:
 	//NetWorkProcess_UDP(GameProcess *pGame);
 
 
-	virtual ~NetWorkProcess_UDP() = 0;
+	~NetWorkProcess_UDP()
+	{}
 	
 
 public:

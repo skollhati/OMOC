@@ -37,7 +37,6 @@ void NetWorkProcess_UDP::InitNetwork(short port_num,char* ip_addr)
 
 	hReceive = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::ReceiveThread, (LPVOID)this, 0, NULL);
 	hHeartBeat = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::CheckHeartBeat, (LPVOID)this, 0,NULL);
-	cout << "hsend, hreceive,hheart beat start" << endl;
 	
 }
 
@@ -116,7 +115,7 @@ void NetWorkProcess_UDP::ReceivePacket()
 		//	//접속 허용 용량 벗어남 알림
 		//}
 
-		this->UDPRecive(buffer, Recv_Size);
+		UDPRecive(buffer, Recv_Size);
 	}
 
 	cout << "Recv From " << inet_ntoa(FromServer.sin_addr) << endl;
@@ -199,31 +198,6 @@ UINT WINAPI NetWorkProcess_UDP::ReceiveThread(LPVOID lpParam)
 	}
 	return 0;
 }
-
-//UINT WINAPI NetWorkProcess_UDP::SendThread(LPVOID lpParam)
-//{
-//
-//	NetWorkProcess_UDP* m_NetProc = (NetWorkProcess_UDP *)lpParam;
-//
-//	Sleep(1000);
-//	while (1)
-//	{
-//		//	WaitForSingleObject(m_NetProc->hSend, INFINITE);
-//			//try-catch
-//		if (m_NetProc->pGameProc != NULL)
-//		{
-//			if (m_NetProc->pGameProc->q_SendData.size() > 0)
-//			{
-//				EnterCriticalSection(&m_cs);
-//				UNPACK_DATA *unpack = m_NetProc->pGameProc->q_SendData.front();
-//				m_NetProc->SendPacket(unpack->com, unpack->buf);
-//				LeaveCriticalSection(&m_cs);
-//			}
-//		}
-//		//	ResetEvent(m_NetProc->hSend);
-//	}
-//
-//}
 
 XY NetWorkProcess_UDP::strToXY(TCHAR* sPacket)
 {

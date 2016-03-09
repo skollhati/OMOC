@@ -8,14 +8,13 @@ void Menu::InitMenu()
 
 int Menu::ShowMainMenu()
 {
-	system("cls");
+	//system("cls");
 
-	cout << "========================================" << endl;
-	cout << "============온라인 오목 대전!============" << endl;
-	cout << "========================================" << endl;
-	cout << "[●]서버 접속 하기" << endl;
-	cout << "[  ]게임 종료" << endl;
-
+	printf("========================================\n");
+	printf("============온라인 오목 대전!============\n");
+	printf("========================================\n");
+	printf("[●]서버 접속 하기\n");
+	printf("[  ]게임 종료\n");
 
 	char ip = '\0';
 	while (1)
@@ -54,7 +53,7 @@ int Menu::ShowMainMenu()
 TCHAR* Menu::InputLoginInfo()
 {
 	TCHAR p_name[50];
-	cout << "유저명을 입력해주세요 :";
+	printf("유저명을 입력해주세요 :");
 	_tscanf(_T("%s"), p_name);
 
 	return p_name;
@@ -133,11 +132,11 @@ WORD* Menu::ShowGameRoom()
 
 void Menu::ShowGameRoomPage(WORD page)
 {
-	cout << "===============================게임 목록===============================" << endl;
+	printf("===============================게임 목록===============================\n");
 
 	if (page == 0 && _tcscmp(g_List[0], _T("")) == 0)
 	{
-		cout << "게임이 존재하지 않습니다." << endl;
+		printf("게임이 존재하지 않습니다.\n");
 	}
 	else {
 
@@ -146,11 +145,10 @@ void Menu::ShowGameRoomPage(WORD page)
 		{
 			cout << "[  ]" << g_List[page - 1] << endl;
 		}
-
-
 	}
-	cout << "===============================[" << page + 1 << "/" << g_roomTotal << "]===============================" << endl;
-	cout << "1 : 방 만들기 /SPACE : 입장 / ↑↓ : 방 선택 /← → : 페이지 전환 / 5 : 새로 고침 /ESC : 종료" << endl;
+	
+	printf("===============================[%d /%d]===============================\n", page + 1, g_roomTotal);
+	printf("1 : 방 만들기 /SPACE : 입장 / ↑↓ : 방 선택 /← → : 페이지 전환 / 5 : 새로 고침 /ESC : 종료");
 }
 
 

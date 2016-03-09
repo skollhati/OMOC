@@ -35,25 +35,25 @@ public:
 
 	void setTextColor(COLORREF color);
 	static UINT WINAPI WaittingTimer(LPVOID lpParam);
-	void UDPRecive(TCHAR* buffer, WORD wSize);
+	virtual void UDPRecive(TCHAR* buffer, WORD wSize);
 	void MenuSelected(int n_menu);
 	void GameSelected(WORD* room_data);
 	void GameRoomProc(WORD* select_num);
 	void MakeGameRoom(TCHAR* title);
 	void JoinWaitGameRoom(TCHAR* title,short port,char* ip_addr);
-
+	void ShowGameList();
+	void InsertGameList(PacketSet p_Packet);
 public:
-
-	HANDLE *hSend;
 	HANDLE hEvent;
-	queue<UNPACK_DATA*> q_SendData;
-	
-
-private:
-
-	GameRoom gRoom;
 	Menu g_menu;
+private:
+	bool myPlayState = false;
+	gRoomData gRoomList[50];
+	GameRoom gRoom;
+	
 	char cmd[256] = "\0";
+	WORD wTotalCount;
+	WORD wReceiveCount = 0;
 };
 
 #endif // !__GAMEPROCESS_H__

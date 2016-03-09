@@ -212,24 +212,28 @@ void GameRoom::startGame()
 	}
 }
 
-
-void GameRoom::setGame(MATCHING match)
+void GameRoom::SetSocket(SOCKET m_sock)
 {
-	_tcscpy(rival, match.rivalName);
 
-	if (match.fPlay)
-	{
-		strcpy(my_stone, "¡Ü");
-		strcpy(rival_stone, "¡Û");
-		turn = MY_TURN;
-	}
-	else
-	{
-		strcpy(my_stone, "¡Û");
-		strcpy(rival_stone, "¡Ü");
-		turn = RIVAL_TURN;
-	}
 }
+
+//void GameRoom::setGame()
+//{
+//	_tcscpy(rival, match.rivalName);
+//
+//	if (match.fPlay)
+//	{
+//		strcpy(my_stone, "¡Ü");
+//		strcpy(rival_stone, "¡Û");
+//		turn = MY_TURN;
+//	}
+//	else
+//	{
+//		strcpy(my_stone, "¡Û");
+//		strcpy(rival_stone, "¡Ü");
+//		turn = RIVAL_TURN;
+//	}
+//}
 
 void GameRoom::RivalStoneInput(int y, int x)
 {

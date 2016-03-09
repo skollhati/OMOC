@@ -26,7 +26,7 @@ public:
 
 private:
 	WORD menu_offset;
-	WORD g_roomTotal;
+	WORD g_roomTotal = 0;
 	TCHAR g_List[50][50];
 };
 #endif  __MENU_H__

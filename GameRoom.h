@@ -28,10 +28,9 @@ public:
 	void checkStone(xy hd, int turn);
 	void initGame();
 	void startGame();
-	void setGame(MATCHING match);
+	void setGame();
 	void RivalStoneInput(int y, int x);
 	int searchStone(xy hd, int, int, int);
-	void UDPRecive(TCHAR* buffer, WORD wSize);
 	void RetireWin();
 	void RivalOutWaitingRoom();
 	void ShowChatFrame();

@@ -27,7 +27,8 @@ int _tmain(int argc, char* argv[])
 	//NetWorkProcess_UDP *pNetwork = new NetWorkProcess_UDP();
 
 	GameProcess GameProc = GameProcess();
-
+	
+	
 	while (1)
 	{
 
