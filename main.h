@@ -22,17 +22,22 @@
 #define USER_OUT 4				//서버 로그아웃에 사용
 #define HEARTBEAT 5				//접속 중임을 주기적으로 알림
 
-#define MATCHING_GAME 11		//대전 상대가 있고 없음을 알림 대기알림 : 0 매칭성공 : 상대 아이디
 #define GAME_RETIRE 12
-#define CHATTING 13
+#define CHATTING 21
+
 
 #define GAME_COMMAND 100		//돌의 움직임을 알림
 #define GAME_REMATCH 101	    //게임 재경기 알림 ( 양쪽 모드 TRUE) 를 전송해야 리매치 성사
 #define GAME_RESULT 102			//게임 결과 알림
 
+
 #define GAME_ROOM_LIST 200
 #define GAME_ROOM_SELECTED 201
 #define GAME_ROOM_REFRESH 202
+#define GAME_ROOM_RIVAL_READY 203
+#define GAME_ROOM_RIVAL_UNREADY 204
+
+#define GAME_ROOM_START 210
 
 #define LEFT 75
 #define RIGHT 77

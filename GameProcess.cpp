@@ -97,6 +97,7 @@ void GameProcess::MakeGameRoom(TCHAR* title)
 	SuspendThread(hReceive);
 }
 
+//networkprocess_udp 구조 고치기 리시브파트..자체 함수만 부를듯?
 void GameProcess::UDPRecive(TCHAR* buffer, WORD wSize)
 {
 	pPacket.GetInit(buffer);
@@ -108,21 +109,34 @@ void GameProcess::UDPRecive(TCHAR* buffer, WORD wSize)
 
 		switch (pPacket.GetWORD())
 		{
-		case MATCHING_GAME:
-			////선공 후공(0,1) + 상대 아이디
-			//MATCHING match_game = *(MATCHING *)pPacket.GetStr();
-			//setGame(match_game);
-			//SetEvent(hEvent);
+		case USER_IN:
+			//서버와 라이벌 구분
+			break;
+
+		case USER_OUT:
+			//라이벌이 나가면 현재 상태에 따라 함수 호출
+			//게임 중이냐 대기실이냐
 			break;
 
 		case GAME_COMMAND:
-		/*	XY temp_xy = strToXY(pPacket.GetStr());
-			RivalStoneInput(temp_xy.y, temp_xy.x);*/
-			break;
-
-		case GAME_REMATCH:
+			XY temp_xy = strToXY(pPacket.GetStr());
+			gRoom.RivalStoneInput(temp_xy.y, temp_xy.x);
 
 			break;
+
+		case GAME_ROOM_LIST:
+			//리스트를 한번에 다받아서 저장
+			//refresh를 통해 새로 갱신
+			break;
+
+		case GAME_ROOM_START:
+			
+			break;
+	
+		case CHATTING:
+
+			break;
+	
 
 		case GAME_RETIRE: //RetireWin();
 			break;

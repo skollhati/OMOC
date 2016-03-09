@@ -1,0 +1,14 @@
+diff a/NetworkProcess_UDP.cpp b/NetworkProcess_UDP.cpp	(rejected hunks)
+@@ -3,8 +3,12 @@
+ #include <iostream>
+ using namespace std;
+ 
++<<<<<<< HEAD
++NetworkProcess_UDP::NetworkProcess_UDP()
++=======
+ 
+ void NetWorkProcess_UDP::InitNetwork()
++>>>>>>> origin/home_dev
+ {
+ 	InitializeCriticalSection(&m_cs);
+ 	short port_num = 8800;

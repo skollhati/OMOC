@@ -7,16 +7,19 @@ void GameRoom::gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-void GameRoom::JoinRival(short port_num,char* ip_addr,TCHAR* rivalplayer)
+void GameRoom::JoinRival(TCHAR* rivalplayer)
 {
-	InitNetwork(port_num,ip_addr);
 	_tcscpy(rival, rivalplayer);
-	ShowGameWaitingRoom();
+	ShowGameWaitingRoom(title);
 }
 
-void GameRoom::JoinGameRoomSocket(short port, char* ip_addr,SOCKET client_sock)
+void GameRoom::JoinGameRoomSocket(short port_num, char* ip_addr,SOCKET client_sock)
 {
-	InitNetwork(port, ip_addr, client_sock);
+	ToRival.sin_family = AF_INET;
+	ToRival.sin_addr.s_addr = inet_addr(ip_addr);
+	ToRival.sin_port = htons(port_num);
+	
+	memcpy(&ClientSocket, &client_sock, sizeof(client_sock));
 }
 
 void GameRoom::DrawGameRoom()
@@ -74,6 +77,24 @@ void GameRoom::initGame()
 		hd = { MAP_X / 2,MAP_Y / 2 };
 		printf("\n");
 	}
+}
+
+BOOL GameRoom::SendPacket(WORD com, TCHAR* Buffer)
+{
+	pPacket.Init();
+	pPacket.PutWORD(com);
+	pPacket.PutStr(Buffer);
+	pPacket.PutSize();
+
+	cout << "보낸 데이터 :" << Buffer << endl;
+	Send_Size = sendto(ClientSocket, (const char*)pPacket.PrintBuffer(), BUFFER_SIZE, 0, (struct sockaddr*)&ToRival, sizeof(ToRival));
+
+	if (Send_Size == pPacket.m_iLen)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 int GameRoom::searchStone(xy hd, int flag, int p, int sw)
@@ -218,39 +239,6 @@ void GameRoom::RivalStoneInput(int y, int x)
 	turn = MY_TURN;
 }
 
-void GameRoom::UDPRecive(TCHAR* buffer, WORD wSize)
-{
-	pPacket.GetInit(buffer);
-
-
-	//사이즈에 맞게 온 함수일 경우 차례대로 진행 아닐 경우 무시
-	if (pPacket.GetSize() == wSize)
-	{
-
-		switch (pPacket.GetWORD())
-		{
-		case USER_IN:
-			
-			break;
-
-		case GAME_COMMAND:
-			XY temp_xy = strToXY(pPacket.GetStr());
-			RivalStoneInput(temp_xy.y, temp_xy.x);
-			break;
-
-		case GAME_REMATCH:
-
-			break;
-
-		case GAME_RETIRE: RetireWin();
-			break;
-
-		}
-
-	}
-
-}
-
 void GameRoom::RetireWin()
 {
 	cout << "상대방이 종료했습니다. 5초 후 대기실로 돌아갑니다." << endl;
@@ -258,12 +246,6 @@ void GameRoom::RetireWin()
 	Sleep(5000);
 	ClearRivalInfo();
 
-}
-
-void GameRoom::SetSocket(SOCKET m_sock)
-{
-	memcpy(&my_sock, &m_sock, sizeof(m_sock));
-	hReceive = (HANDLE)_beginthreadex(NULL,0,NetWorkProcess_UDP::ReceiveThread)
 }
 
 void GameRoom::ShowGameWaitingRoom(TCHAR* title)
@@ -327,9 +309,9 @@ void GameRoom::InsertRivalName(TCHAR* rival_name)
 
 void GameRoom::ClearRivalInfo()
 {
-	memset(&ToServer, 0, sizeof(ToServer));
+	memset(&ToRival, 0, sizeof(ToRival));
 	_tcscpy(rival, _T(""));
-	ShowGameWaitingRoom("");
+	ShowGameWaitingRoom(_T(""));
 }
 
 void GameRoom::InputChat()

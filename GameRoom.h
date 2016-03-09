@@ -4,7 +4,7 @@
 #include "main.h"
 #include "NetworkProcess_UDP.h"
 
-class GameRoom :NetWorkProcess_UDP
+class GameRoom
 {
 public :
 	GameRoom()
@@ -15,7 +15,8 @@ public :
 
 
 public:
-	void JoinRival(short port_num, char* ip_addr,TCHAR* player_name);
+	BOOL SendPacket(WORD com, TCHAR* Buffer);
+	void JoinRival(TCHAR* player_name);
 	void ChangeUserState(TCHAR* player, bool b_ready);
 	void SetSocket(SOCKET m_sock);
 	void DrawGameRoom();
@@ -43,14 +44,16 @@ public:
 private:
 	int turn = 0;
 	int GMap[MAP_Y][MAP_X];
-	xy hd;
-	TCHAR player[50];
 	char my_stone[3];
 	char rival_stone[3];
 	PacketSet pPacket;
 	TCHAR rival[50];
 	BOOL GameMaster;
 	TCHAR* title;
-	SOCKET my_sock;
+	SOCKET ClientSocket;
+	SOCKADDR_IN ToRival;
+	WORD Send_Size;
+	xy hd;
+	TCHAR player[50];
 };
 #endif

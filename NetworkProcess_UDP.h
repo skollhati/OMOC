@@ -36,7 +36,6 @@ public:
 	PSOCKET_OBJ InUserVector(char* ipAddr);
 	
 	static UINT WINAPI CheckHeartBeat(LPVOID lpParam);
-	static UINT WINAPI SendThread(LPVOID lpParam);
 	static UINT WINAPI ReceiveThread(LPVOID lpParam);
 
 public:
