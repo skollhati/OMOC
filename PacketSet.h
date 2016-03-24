@@ -23,7 +23,9 @@ class PacketSet
 
 public:
 	PacketSet()
-	{}
+	{
+		memset(m_szBuffr, 0, sizeof(m_szBuffr));
+	}
 
 	~PacketSet()
 	{}
@@ -36,14 +38,15 @@ public:
 	void	PutBYTE(BYTE	bByte);
 	void    PutWORD(WORD	wWORD);
 	void    Putint(int      iint);
-	void	PutStr(TCHAR* sStr);
+	void	PutStr(char* sStr,WORD buf_size);
 	void	PutSize();
-	TCHAR*	PrintBuffer();
-	void    GetInit(TCHAR*    ib_Buffer);
+	void ClosePacket();
+	char*	PrintBuffer();
+	void    GetInit(char*    ib_Buffer);
 	BYTE	GetBYTE(void);
 	WORD	GetWORD(void);
 	int		GetInt(void);
-	TCHAR*	GetStr(void);
+	char*	GetStr(void);
 	WORD	GetSize(void);
 	
 	
@@ -51,8 +54,8 @@ public:
 
 
 private:
-	TCHAR	m_szBuffr[2000];
-	TCHAR*  m_rzBuffr;
+	char	m_szBuffr[2000];
+	char*  m_rzBuffr;
 
 };
 #endif

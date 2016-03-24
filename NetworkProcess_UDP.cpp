@@ -10,7 +10,9 @@ void NetWorkProcess_UDP::InitNetwork(short port_num,char* ip_addr)
 	wUserCount = 0;
 	hSend = CreateEvent(NULL, TRUE, FALSE, NULL);
 	hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
-
+	
+	server_obj = new SOCKET_DATA();
+	memset(server_obj, 0, sizeof(SOCKET_DATA));
 	if (WSAStartup(0x202, &wsaData) == SOCKET_ERROR)
 	{
 		cout << "WinSock initialize fault" << endl;
@@ -19,10 +21,13 @@ void NetWorkProcess_UDP::InitNetwork(short port_num,char* ip_addr)
 
 	memset(&ToServer, 0, sizeof(ToServer));
 	memset(&FromServer, 0, sizeof(FromServer));
-
+	
 	ToServer.sin_family = AF_INET;
 	ToServer.sin_addr.s_addr = inet_addr(ip_addr);
 	ToServer.sin_port = htons(port_num);
+	
+	strcpy(server_obj->ipAddr, ip_addr);
+	server_obj->iPort = port_num;
 
 	ClientSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
@@ -35,8 +40,7 @@ void NetWorkProcess_UDP::InitNetwork(short port_num,char* ip_addr)
 	}
 	IniSocketObj();
 
-	hReceive = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::ReceiveThread, (LPVOID)this, 0, NULL);
-	hHeartBeat = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::CheckHeartBeat, (LPVOID)this, 0,NULL);
+
 	
 }
 
@@ -71,7 +75,7 @@ void NetWorkProcess_UDP::InitNetwork(short port_num, char* ip_addr,SOCKET client
 	}
 	IniSocketObj();
 
-	hReceive = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::ReceiveThread, (LPVOID)this, 0, NULL);
+	//hReceive = (HANDLE)_beginthreadex(NULL, 0, NetWorkProcess_UDP::ReceiveThread, (LPVOID)this, 0, NULL);
 	cout << "hsend, hreceive,hheart beat start" << endl;
 
 }
@@ -90,22 +94,22 @@ void NetWorkProcess_UDP::IniSocketObj()
 		pSocketObj->wUserNum = i;
 		vSocketData.push_back(pSocketObj);
 	}
+	printf("소켓 초기화 완료\n");
 }
 
-void NetWorkProcess_UDP::ReceivePacket()
+char* NetWorkProcess_UDP::ReceivePacket()
 {
-	TCHAR buffer[BUFFER_SIZE];
+	char buffer[BUFFER_SIZE];
 
 	int FromSever_Size = sizeof(FromServer);
 	WORD wUserNum;
-	while (1)
-	{
+	memset(buffer, 0, sizeof(buffer));
 		Recv_Size = recvfrom(ClientSocket, (char *)buffer, BUFFER_SIZE, 0, (struct sockaddr*)&FromServer, &FromSever_Size);
 
 		if (Recv_Size == 0)
 		{
 			cout << "recvForm() error! " << endl;
-			continue;
+		
 		}
 
 		//wUserNum = CheckUserNum(inet_ntoa(FromServer.sin_addr), FromServer.sin_port);
@@ -115,11 +119,7 @@ void NetWorkProcess_UDP::ReceivePacket()
 		//	//접속 허용 용량 벗어남 알림
 		//}
 
-		UDPRecive(buffer, Recv_Size);
-	}
-
-	cout << "Recv From " << inet_ntoa(FromServer.sin_addr) << endl;
-	cout << "DATA : " << buffer << endl;
+	return buffer;
 
 }
 
@@ -169,14 +169,16 @@ PSOCKET_OBJ NetWorkProcess_UDP::InUserVector(char* ipAddr)
 	return pEmptyObj;
 }
 
-BOOL NetWorkProcess_UDP::SendPacket(WORD com, TCHAR* Buffer)
+BOOL NetWorkProcess_UDP::SendPacket(WORD com, char* Buffer,WORD buf_size)
 {
 	pPacket.Init();
 	pPacket.PutWORD(com);
-	pPacket.PutStr(Buffer);
-	pPacket.PutSize();
+	pPacket.PutStr(Buffer,buf_size);
+	pPacket.ClosePacket();
+	//pPacket.PutSize();
 
-	cout << "보낸 데이터 :" << Buffer << endl;
+	printf("보낸 데이터 : %s \n",Buffer);
+	WORD SendSize = pPacket.m_iLen;
 	Send_Size = sendto(ClientSocket, (const char*)pPacket.PrintBuffer(), BUFFER_SIZE, 0, (struct sockaddr*)&ToServer, sizeof(ToServer));
 
 	if (Send_Size == pPacket.m_iLen)
@@ -188,18 +190,26 @@ BOOL NetWorkProcess_UDP::SendPacket(WORD com, TCHAR* Buffer)
 	return false;
 }
 
-UINT WINAPI NetWorkProcess_UDP::ReceiveThread(LPVOID lpParam)
+BOOL NetWorkProcess_UDP::SendPacket(PSOCKET_OBJ Client)
 {
-	NetWorkProcess_UDP* m_NetProc = (NetWorkProcess_UDP *)lpParam;
+	SOCKADDR_IN ToClient;
+	ToClient.sin_family = AF_INET;
+	ToClient.sin_addr.s_addr = inet_addr(Client->ipAddr);
+	ToClient.sin_port = Client->iPort;
 
-	while (1)
+	WORD SendSize = pPacket.m_iLen;
+	Send_Size = sendto(ClientSocket, (const char*)pPacket.PrintBuffer(), BUFFER_SIZE, 0, (struct sockaddr*)&ToClient, sizeof(ToClient));
+
+	if (Send_Size == pPacket.m_iLen)
 	{
-		m_NetProc->ReceivePacket();
+		HeartBeatTimerReset();
+		return true;
 	}
-	return 0;
+
+	return false;
 }
 
-XY NetWorkProcess_UDP::strToXY(TCHAR* sPacket)
+XY NetWorkProcess_UDP::strToXY(char* sPacket)
 {
 
 	XY unpack_xy = *(XY *)&sPacket[0];
@@ -223,7 +233,7 @@ UINT WINAPI NetWorkProcess_UDP::CheckHeartBeat(LPVOID lpParam)
 	while (1)
 	{
 		WaitForSingleObject(m_NetProc->hTimer, INFINITE);
-		m_NetProc->SendPacket(HEARTBEAT, _T(""));
+		m_NetProc->SendPacket(HEARTBEAT, "",1);
 	}
 
 

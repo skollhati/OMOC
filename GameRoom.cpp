@@ -7,34 +7,32 @@ void GameRoom::gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-void GameRoom::JoinRival(TCHAR* rivalplayer)
+void GameRoom::JoinRival(char* rivalplayer)
 {
-	_tcscpy(rival, rivalplayer);
-	ShowGameWaitingRoom(title);
+	strcpy(rival, rivalplayer);
+	//ShowGameWaitingRoom(title,rivalplayer);
 }
 
-void GameRoom::JoinGameRoomSocket(short port_num, char* ip_addr,SOCKET client_sock)
+void GameRoom::JoinGameRoomSocket(short port_num, char* ip_addr)
 {
-	ToRival.sin_family = AF_INET;
-	ToRival.sin_addr.s_addr = inet_addr(ip_addr);
-	ToRival.sin_port = htons(port_num);
-	
-	memcpy(&ClientSocket, &client_sock, sizeof(client_sock));
+	RivalPlayer->iPort = port_num;
+	strcpy(RivalPlayer->ipAddr, ip_addr);
+
 }
 
 void GameRoom::DrawGameRoom()
 {
-	
+
 }
 
 void GameRoom::RivalOutWaitingRoom()
 {
 	ClearRivalInfo();
-	
+
 	if (!GameMaster)
 		GameMaster = 1;
 
-	_tcscpy(rival, _T(""));
+	strcpy(rival, "");
 }
 
 void GameRoom::initGame()
@@ -79,18 +77,20 @@ void GameRoom::initGame()
 	}
 }
 
-BOOL GameRoom::SendPacket(WORD com, TCHAR* Buffer)
+BOOL GameRoom::SendPacket(PSOCKET_OBJ p_sock)
 {
-	pPacket.Init();
-	pPacket.PutWORD(com);
-	pPacket.PutStr(Buffer);
-	pPacket.PutSize();
+	
+	SOCKADDR_IN ToClient;
+	ToClient.sin_family = AF_INET;
+	ToClient.sin_addr.s_addr = inet_addr(p_sock->ipAddr);
+	ToClient.sin_port = p_sock->iPort;
 
-	cout << "보낸 데이터 :" << Buffer << endl;
-	Send_Size = sendto(ClientSocket, (const char*)pPacket.PrintBuffer(), BUFFER_SIZE, 0, (struct sockaddr*)&ToRival, sizeof(ToRival));
+	WORD SendSize = pPacket.m_iLen;
+	Send_Size = sendto(ClientSocket, (const char*)pPacket.PrintBuffer(), BUFFER_SIZE, 0, (struct sockaddr*)&ToClient, sizeof(ToClient));
 
 	if (Send_Size == pPacket.m_iLen)
 	{
+		//HeartBeatTimerReset();
 		return true;
 	}
 
@@ -147,14 +147,14 @@ void GameRoom::checkStone(xy hd, int turn)
 			getch();
 
 			Sleep(2000);
-			
+
 		}
 	}
 }
 
 void GameRoom::startGame()
 {
-	
+
 	_tprintf(_T("매칭 완료!! 5초 후 게임을 시작합니다!\n"));
 
 	system("cls");
@@ -180,7 +180,7 @@ void GameRoom::startGame()
 					hd.x += 1;
 				break;
 			case UP:
-				if (hd.y >0)
+				if (hd.y > 0)
 					hd.y -= 1;
 				break;
 			case DOWN:
@@ -197,13 +197,13 @@ void GameRoom::startGame()
 						GMap[hd.y][hd.x] = MY_TURN;
 						printf("%s", my_stone);
 						checkStone(hd, turn);
-						SendPacket(GAME_COMMAND, (TCHAR*)&hd);
+						//SendPacket(GAME_COMMAND, (char*)&hd,sizeof(hd));
 						turn = RIVAL_TURN;
 					}
 				}
 				break;
 			case ESC:
-				SendPacket(USER_OUT, NULL);
+				//	SendPacket(USER_OUT, "",1);
 				exit(1);
 				break;
 			}
@@ -214,7 +214,7 @@ void GameRoom::startGame()
 
 void GameRoom::SetSocket(SOCKET m_sock)
 {
-
+	ClientSocket = m_sock;
 }
 
 //void GameRoom::setGame()
@@ -252,13 +252,14 @@ void GameRoom::RetireWin()
 
 }
 
-void GameRoom::ShowGameWaitingRoom(TCHAR* title)
+void GameRoom::ShowGameWaitingRoom(char* title, char* cPlayer)
 {
-	if (_tcscmp(this->title, title) != 0);
-		_tcscpy(this->title, title);
+	if (strcmp(this->title, title) != 0)
+		strcpy(this->title, title);
 
-	cout << "방제 : " << title << endl;
-	cout << "방장 : ";
+	strcpy(player, cPlayer);
+	printf("방제 : %s \n", title);
+	printf("방장 :\n");
 	gotoxy(0, 2);
 	for (int i = 0; i < 15; i++)
 	{
@@ -271,18 +272,18 @@ void GameRoom::ShowGameWaitingRoom(TCHAR* title)
 		printf("─");
 	}
 	gotoxy(0, 3);
-	cout << "플레이어 1 : "<<player;
+	printf("플레이어 : %s", player);
 
 	gotoxy(33, 3);
-	cout << "플레이어 2 : ";
-	
-	if (!(_tcscmp(rival, _T("")) == 0))
-		cout << rival;
+	printf("상대방 : %s", rival);
 
+	/*if (!(strcmp(rival, "") == 0))
+		cout << rival;
+*/
 	gotoxy(0, 4);
-	cout << "준비 상태:";
+	printf("준비 상태:");
 	gotoxy(33, 4);
-	cout << "준비 상태:";
+	printf("준비 상태:");
 
 	gotoxy(0, 5);
 	for (int i = 0; i < 15; i++)
@@ -304,23 +305,39 @@ void GameRoom::ShowGameWaitingRoom(TCHAR* title)
 	InputChat();
 }
 
-void GameRoom::InsertRivalName(TCHAR* rival_name)
+void GameRoom::PlayerReady(bool ready)
 {
-	
+	if (ready)
+	{
+		gotoxy(0, 4);
+		printf("준비 상태: 준비 완료");
+	}
+	else
+	{
+		gotoxy(0, 4);
+		printf("준비 상태:                 ");
+	}
+}
+
+void GameRoom::InsertRivalName(char* rival_name)
+{
+	strcpy(rival, rival_name);
 	gotoxy(33, 3);
-	cout << "플레이어 2: "<<rival_name;
+	printf("상대방 : %s", rival_name);
 }
 
 void GameRoom::ClearRivalInfo()
 {
-	memset(&ToRival, 0, sizeof(ToRival));
-	_tcscpy(rival, _T(""));
-	ShowGameWaitingRoom(_T(""));
+	memset(&RivalPlayer, 0, sizeof(RivalPlayer));
+	strcpy(rival, "");
+	gotoxy(33, 3);
+	printf("상대방 :                           ");
+
 }
 
 void GameRoom::InputChat()
 {
-	TCHAR* chat_str;
+	char chat_str[30];
 	gotoxy(0, 24);
 	for (int i = 0; i < 100; i++)
 	{
@@ -329,11 +346,50 @@ void GameRoom::InputChat()
 	gotoxy(0, 24);
 
 	printf("채팅 입력:");
+
+	scanf("%s", chat_str);
 	
-	_tcscanf(_T("%s"), chat_str);
-	SendPacket(CHATTING,chat_str);
+	if (strcmp(chat_str, "#준비완료") == 0)
+	{
+		PlayerReady(true);
+		pPacket.Init();
+		pPacket.PutWORD(GAME_ROOM_RIVAL_READY);
+		pPacket.ClosePacket();
+		SendPacket(RivalPlayer);
+	}
+	else if (strcmp(chat_str, "#게임시작") == 0)
+	{
+		pPacket.Init();
+		pPacket.PutWORD(GAME_ROOM_START);
+		pPacket.ClosePacket();
+		SendPacket(RivalPlayer);
+	}else
+	{
+		InsertChat(chat_str);
+	}
+	//SendPacket(CHATTING,chat_str,strlen(chat_str));
 
 	InputChat();
+}
+
+void GameRoom::InsertChat(char* chat_str)
+{
+	for (int i = 0; i <8; i++)
+	{
+		chatData[7 - i - 1] = chatData[7 - i];
+	}
+	chatData[8] = chat_str;
+
+	
+
+	for (int i = 0; i < 8; i++)
+	{
+		gotoxy(0, 11 + i);
+		printf("                                                ");
+		gotoxy(0, 11 + i);
+		if(strcmp(chatData[i],"") != 0)
+		printf("%s", chatData[i]);
+	}
 }
 
 void GameRoom::ShowChatFrame()

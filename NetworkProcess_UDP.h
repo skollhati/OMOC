@@ -24,20 +24,20 @@ public:
 
 public:
 	WORD CheckUserNum(char* ipAddr,int iPort);
-	BOOL SendPacket(WORD com,TCHAR* Buffer);
+	BOOL SendPacket(WORD com,char* Buffer,WORD buf_size);
 	void InitNetwork(short port,char* ip_addr);
 	void InitNetwork(short port, char* ip_addr,SOCKET client_sock);
+	BOOL SendPacket(PSOCKET_OBJ Client);
 
-	void ReceivePacket();
-	virtual void UDPRecive(TCHAR* buffer,WORD wSize) = 0;
+	char* ReceivePacket();
+	virtual void UDPRecive(char* buffer) = 0;
 	void DisConnect();
 	void IniSocketObj();
 	void HeartBeatTimerReset();
-	XY strToXY(TCHAR* sPacket);
+	XY strToXY(char* sPacket);
 	PSOCKET_OBJ InUserVector(char* ipAddr);
 	
 	static UINT WINAPI CheckHeartBeat(LPVOID lpParam);
-	static UINT WINAPI ReceiveThread(LPVOID lpParam);
 
 public:
 	WSADATA wsaData;
@@ -59,6 +59,7 @@ public:
 	HANDLE hHeartBeat;
 	LARGE_INTEGER liDueTime;
 
+	PSOCKET_OBJ server_obj;
 	
 	vector<PSOCKET_OBJ> vSocketData;
 };

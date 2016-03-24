@@ -3,7 +3,7 @@
 
 void PacketSet::Init()
 {
-	m_iLen = 2;
+	m_iLen = 0;
 	memset(m_szBuffr, 0, sizeof(m_szBuffr));
 }
 
@@ -30,19 +30,23 @@ void PacketSet::Putint(int iint)
 	m_iLen += sizeof(int);
 }
 
-void PacketSet::PutStr(TCHAR* sStr)
+void PacketSet::PutStr(char* sStr,WORD buf_size)
 {
-	_tcscpy(&m_szBuffr[m_iLen],sStr);
+	memcpy(&m_szBuffr[m_iLen],sStr,buf_size);
 
-	m_iLen += _tcslen(sStr);
-	*(WORD*)(&m_szBuffr[m_iLen]) = 0;
-	m_iLen += 2;
+	m_iLen += buf_size;
+
+}
+void PacketSet::ClosePacket()
+{
+	*(WORD *)&m_szBuffr[m_iLen] = 0;
+	m_iLen += sizeof(WORD);
 }
 
-void PacketSet::GetInit(TCHAR* ib_Buffer)
+void PacketSet::GetInit(char* ib_Buffer)
 {
 	m_rzBuffr = ib_Buffer;
-	m_iLen = 2;
+	m_iLen = 0;
 }
 
 BYTE PacketSet::GetBYTE()
@@ -78,44 +82,21 @@ int PacketSet::GetInt()
 	return iINT;
 }
 
-TCHAR* PacketSet::GetStr()
+char* PacketSet::GetStr()
 {
-	TCHAR* sStr = &m_rzBuffr[m_iLen];
-	m_iLen += _tcslen(sStr) + 2;
-	_tprintf(_T("%s\n"), sStr);
+	char* sStr = (char *)&m_rzBuffr[m_iLen];
+	//memcpy(sStr, &m_rzBuffr[m_iLen],);
+	m_iLen += (strlen(sStr)+1);
+	
 	return sStr;
 }
 
-TCHAR* PacketSet::PrintBuffer()
+char* PacketSet::PrintBuffer()
 {
 	return m_szBuffr;
 }
 
-//TCHAR* PacketSet::PackedPacket(TCHAR message[], WORD command)
-//{
-//	
-//	TCHAR szBuffer[1024];
-//	int offset = (sizeof(WORD) * 2);
-//
-//	*(WORD *)(&szBuffer[0]) = (WORD)(_tcslen(message) + 6); 
-//	*(WORD *)(&szBuffer[2]) = command;						
-//	_tcscpy(&szBuffer[4], message);							
-//	
-//	offset += _tcslen(message);
-//	*(WORD *)(&szBuffer[offset]) = 00;					
-//	
-//	return szBuffer;
-//}
-//
-//
-//UnPacket PacketSet::UnpackPacket(TCHAR recvPacket[])
-//{
-//	UnPacket uPacket;
-//	uPacket.command = *(DWORD *)&recvPacket[2];
-//	_tcscpy(uPacket.message, (TCHAR *)(&recvPacket[4]));
-//
-//	return uPacket;
-//}
+
 
 
 

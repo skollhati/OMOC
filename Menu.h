@@ -13,20 +13,25 @@ public:
 	{}
 
 public:
-	void InitMenu();
+	void InitMenu(WORD wOff);
 	int ShowMainMenu();
-	
-	WORD* ShowGameRoom();
-	TCHAR* InputLoginInfo();
-
+	WORD ShowGameRoom(WORD wTotal);
+	char* InputLoginInfo();
+	void SendRefreshRoom();
 	void ShowGameRoomPage(WORD page);
 	void GameRoomSelector(int y);
+	char* ShowGameMakeOption();
 	void MenuSelector(int y);
 	void EraseMenu(int offset);
+	SENDING_GAME_ROOM g_List[50]; //구조체 이용하기
 
 private:
 	WORD menu_offset;
-	WORD g_roomTotal = 0;
-	TCHAR g_List[50][50];
+	WORD g_TotalPage = 0;
+public:
+	WORD room_num;
+	char* room_title;
+
+	
 };
 #endif  __MENU_H__

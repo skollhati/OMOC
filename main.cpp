@@ -27,11 +27,11 @@ int _tmain(int argc, char* argv[])
 	//NetWorkProcess_UDP *pNetwork = new NetWorkProcess_UDP();
 
 	GameProcess GameProc = GameProcess();
-	
+	GameProc.StartClient();
 	
 	while (1)
 	{
-
+		Sleep(200);
 	}
 	
 	

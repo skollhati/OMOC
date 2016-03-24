@@ -35,23 +35,30 @@ public:
 
 	void setTextColor(COLORREF color);
 	static UINT WINAPI WaittingTimer(LPVOID lpParam);
-	virtual void UDPRecive(TCHAR* buffer, WORD wSize);
+	void UDPRecive(char* buffer);
 	void MenuSelected(int n_menu);
-	void GameSelected(WORD* room_data);
-	void GameRoomProc(WORD* select_num);
-	void MakeGameRoom(TCHAR* title);
-	void JoinWaitGameRoom(TCHAR* title,short port,char* ip_addr);
-	void ShowGameList();
-	void InsertGameList(PacketSet p_Packet);
+	void GameSelected(WORD room_data);
+	void GameRoomProc(WORD select_num);
+	void MakeGameRoom(char* title);
+	void JoinWaitGameRoom(char* title,short port,char* ip_addr);
+	void InsertGameList();
+	void NetworkThread();
+	void RoomProcess(WORD task_num);
+	void StartClient();
+	static UINT WINAPI ReceiveThread(LPVOID lpParam);
+
 public:
 	HANDLE hEvent;
 	Menu g_menu;
 private:
+	PSOCKET_OBJ HOST;
+
 	bool myPlayState = false;
-	gRoomData gRoomList[50];
+	SENDING_GAME_ROOM gRoomList[50];
 	GameRoom gRoom;
-	
+	WORD offset=0;
 	char cmd[256] = "\0";
+	char player_name[30];
 	WORD wTotalCount;
 	WORD wReceiveCount = 0;
 };

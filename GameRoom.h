@@ -15,14 +15,14 @@ public :
 
 
 public:
-	BOOL SendPacket(WORD com, TCHAR* Buffer);
-	void JoinRival(TCHAR* player_name);
-	void ChangeUserState(TCHAR* player, bool b_ready);
+	BOOL SendPacket(PSOCKET_OBJ p_sock);
+	void JoinRival(char* player_name);
+	void ChangeUserState(char* player, bool b_ready);
 	void SetSocket(SOCKET m_sock);
 	void DrawGameRoom();
-	void JoinGameRoomSocket(short port, char* ip_addr,SOCKET client_sock);
-	void ChatArea(TCHAR* chatData);
-	
+	void JoinGameRoomSocket(short port, char* ip_addr);
+	void ChatArea(char* chatData);
+	void InsertChat(char* chat_str);
 	//게임 플레이 관련 함수
 	void gotoxy(int x, int y);
 	void checkStone(xy hd, int turn);
@@ -35,9 +35,12 @@ public:
 	void RivalOutWaitingRoom();
 	void ShowChatFrame();
 	void InputChat();
-	void ShowGameWaitingRoom(TCHAR* title);
-	void InsertRivalName(TCHAR* rival_name);
+	void ShowGameWaitingRoom(char* title,char* cPlayer);
+	void InsertRivalName(char* rival_name);
 	void ClearRivalInfo();
+	void PlayerReady(bool ready);
+public:
+	PSOCKET_OBJ RivalPlayer;
 
 
 private:
@@ -46,13 +49,13 @@ private:
 	char my_stone[3];
 	char rival_stone[3];
 	PacketSet pPacket;
-	TCHAR rival[50];
 	BOOL GameMaster;
-	TCHAR* title;
+	char title[30];
 	SOCKET ClientSocket;
-	SOCKADDR_IN ToRival;
+	char player[30];
 	WORD Send_Size;
 	xy hd;
-	TCHAR player[50];
+	char rival[30]="\0";
+	char* chatData[8];
 };
 #endif
